@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>parcher · planes y eventos de tu ciudad</title>
+  <meta name="description" content="los parches de tu ciudad, viernes a viernes. mandame DM en @soyparcher y te paso el parche." />
+
+  <!-- open graph -->
+  <meta property="og:title" content="parcher · vení, parchate." />
+  <meta property="og:description" content="los parches de tu ciudad, viernes a viernes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://parcher.co" />
+  <meta property="og:image" content="https://parcher.co/assets/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/logo/parcher-monogram-avatar.svg" />
+
+  <!-- fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- 1. HERO -->
+  <section class="hero">
+    <div class="container">
+      <img class="hero-avatar" src="assets/logo/parcher-monogram-avatar.svg" alt="parcher" />
+
+      <h1>parcher<span class="dot">.</span></h1>
+
+      <div class="hero-slogan">vení, parchate.</div>
+
+      <p class="hero-tagline">
+        los parches de tu ciudad,<br />
+        <span class="accent">viernes</span> a viernes.
+      </p>
+
+      <a class="cta-primary" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">
+        <span>escribime por DM</span>
+        <span class="arrow">→</span>
+      </a>
+      <div class="cta-secondary">@soyparcher</div>
+    </div>
+  </section>
+
+  <!-- 2. CÓMO FUNCIONA -->
+  <section class="how">
+    <div class="container">
+      <p class="eyebrow">cómo funciona</p>
+      <h2>tres pasos, <span class="accent">cero</span> apps.</h2>
+
+      <div class="steps">
+        <div>
+          <div class="step-number">01</div>
+          <div class="step-text">me escribís por DM</div>
+        </div>
+        <div>
+          <div class="step-number">02</div>
+          <div class="step-text">te paso el parche</div>
+        </div>
+        <div>
+          <div class="step-number">03</div>
+          <div class="step-text">vos elegís y vas</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. VIBES -->
+  <section class="vibes">
+    <div class="container">
+      <p class="eyebrow">vibes · no categorías</p>
+      <h2>te paso lo de <span class="accent">hoy</span>, por vibe.</h2>
+
+      <p class="vibes-intro muted">
+        no te organizo por categoría.<br />
+        te organizo por <span class="accent">cómo</span> te vas a sentir.
+      </p>
+
+      <div class="chip-grid">
+        <article class="chip">
+          <img src="assets/chips/cultural.jpg" alt="parche cultural en Cali" loading="lazy" />
+          <div class="chip-overlay"></div>
+          <span class="chip-tag ink">#cultural</span>
+        </article>
+
+        <article class="chip">
+          <img src="assets/chips/familiar.jpg" alt="parche familiar en Cali" loading="lazy" />
+          <div class="chip-overlay"></div>
+          <span class="chip-tag cali">#familiar</span>
+        </article>
+
+        <article class="chip">
+          <img src="assets/chips/creativo.jpg" alt="parche creativo en Cali" loading="lazy" />
+          <div class="chip-overlay"></div>
+          <span class="chip-tag magenta">#creativo</span>
+        </article>
+
+        <article class="chip">
+          <img src="assets/chips/salsa.jpg" alt="parche de salsa en Cali" loading="lazy" />
+          <div class="chip-overlay"></div>
+          <span class="chip-tag salsa">#salsa</span>
+        </article>
+
+        <article class="chip">
+          <img src="assets/chips/comunitario.jpg" alt="parche comunitario en Cali" loading="lazy" />
+          <div class="chip-overlay"></div>
+          <span class="chip-tag pacific">#comunitario</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. SAMPLE DM -->
+  <section class="sample-dm">
+    <div class="container">
+      <p class="eyebrow">así es la conversación</p>
+      <h2>preguntame, <span class="accent">te respondo</span>.</h2>
+
+      <div class="dm-wrap" id="dm">
+        <div class="dm-header">
+          <div class="dm-header-avatar">
+            <img src="assets/logo/parcher-monogram-avatar.svg" alt="" />
+          </div>
+          <div>
+            <div class="dm-header-name">parcher</div>
+            <div class="dm-header-sub">@soyparcher</div>
+          </div>
+        </div>
+
+        <div class="dm-stream">
+          <div class="bubble bot b1">
+            qué hubo. soy parcher.<br />qué andás buscando?
+          </div>
+
+          <div class="bubble me b2">
+            algo cultural pa' hoy
+          </div>
+
+          <div class="typing t1" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+
+          <div class="bubble bot b3">
+            hoy en cali tenés:
+            <span class="ev">🕒 7pm · Lerner san antonio · #cultural</span>
+            <span class="ev-sub">conversatorio sobre Andrés Caicedo</span>
+            <span class="ev">🕒 8pm · La Tertulia · #cultural</span>
+            <span class="ev-sub">ciclo de cine colombiano</span>
+            <br />cuál te suena?
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. CTA FINAL -->
+  <section class="cta-final">
+    <div class="container">
+      <h2>¿qué parche hay <span class="accent">pa' hoy</span>?</h2>
+
+      <a class="cta-primary" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">
+        <span>vení, parchate</span>
+        <span class="arrow">→</span>
+      </a>
+      <div class="cta-secondary">@soyparcher</div>
+    </div>
+  </section>
+
+  <!-- 6. FOOTER -->
+  <footer>
+    <div class="container">
+      <div>parcher · nace en cali · 2026</div>
+      <div>
+        <a href="https://instagram.com/soyparcher" target="_blank" rel="noopener">@soyparcher</a>
+        &nbsp;·&nbsp;
+        <a href="mailto:hola@parcher.co">hola@parcher.co</a>
+      </div>
+    </div>
+    <div class="watermark" aria-hidden="true"></div>
+  </footer>
+
+  <script>
+    // trigger animación del sample DM cuando entra al viewport
+    (function () {
+      var dm = document.getElementById('dm');
+      if (!dm || !('IntersectionObserver' in window)) {
+        if (dm) dm.classList.add('in-view');
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            dm.classList.add('in-view');
+            io.disconnect();
+          }
+        });
+      }, { threshold: 0.35 });
+      io.observe(dm);
+    })();
+  </script>
+</body>
+</html>

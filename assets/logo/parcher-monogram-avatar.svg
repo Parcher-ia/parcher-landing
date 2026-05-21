@@ -1,0 +1,12 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="ink-bleed" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85 1.4" numOctaves="2" seed="3"/>
+      <feDisplacementMap in="SourceGraphic" scale="0.9"/>
+    </filter>
+  </defs>
+  <circle cx="100" cy="100" r="100" fill="#FFC91F"/>
+  <g filter="url(#ink-bleed)">
+    <text x="100" y="145" text-anchor="middle" font-family="Fraunces, 'Times New Roman', serif" font-size="170" font-weight="600" fill="#0F1730" letter-spacing="-4">p<tspan fill="#E63282" font-style="italic">.</tspan></text>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+<svg viewBox="0 0 617 280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="ink-bleed" x="-2%" y="-5%" width="104%" height="115%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85 1.4" numOctaves="2" seed="3"/>
+      <feDisplacementMap in="SourceGraphic" scale="1.2"/>
+    </filter>
+  </defs>
+  <g filter="url(#ink-bleed)">
+    <text x="40" y="160" font-family="Fraunces, 'Times New Roman', serif" font-size="170" font-weight="600" fill="#0F1730" letter-spacing="-4">parcher<tspan fill="#E63282" font-style="italic">.</tspan></text>
+  </g>
+  <line x1="40" y1="218" x2="577" y2="218" stroke="#0F1730" stroke-width="1.2" opacity="0.3"/>
+  <text x="308.5" y="248" text-anchor="middle" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="20" font-weight="700" fill="#0F1730" letter-spacing="2">VENÍ, PARCHATE.</text>
+</svg>
