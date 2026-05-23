@@ -1,40 +1,56 @@
 #!/usr/bin/env bash
 # Deploy de parcher-landing a S3 + CloudFront.
-# Cuenta AWS: Parcher (458982626937), profile: parcher (default).
 #
-# Prerrequisitos (crear ANTES del primer deploy — ver plan §6):
-#   1. S3 bucket: parcher-landing-site (static website hosting)
-#   2. CloudFront distribution para parcher.co + www.parcher.co
-#   3. ACM certificate us-east-1 para parcher.co + *.parcher.co
-#   4. Route 53 ALIAS records → CloudFront
-#   5. IAM policy con s3:PutObject + cloudfront:CreateInvalidation
+# Stack en cuenta AWS Parcher (458982626937):
+#   - S3 bucket:                parcher-landing-site (us-east-1, OAC-only)
+#   - CloudFront distribution:  E24RGSFRFUFZGX  (d27jwgf7l2eby6.cloudfront.net)
+#   - ACM cert (us-east-1):     parcher.co + www.parcher.co
+#
+# Hosted zone parcher.co vive en cuenta Parcher (Z00126392W650WGAFFQMH).
+# Registro del dominio sigue en cuenta sugarvalley (058264274774); solo NS apuntan a Parcher.
+#
+# Override de variables si hace falta:
+#   PARCHER_LANDING_BUCKET, PARCHER_LANDING_DISTRO, PARCHER_AWS_PROFILE
 
 set -euo pipefail
 
 BUCKET="${PARCHER_LANDING_BUCKET:-parcher-landing-site}"
-DISTRIBUTION_ID="${PARCHER_LANDING_DISTRO:-TODO_DISTRIBUTION_ID}"
-
-if [[ "$DISTRIBUTION_ID" == "TODO_DISTRIBUTION_ID" ]]; then
-  echo "ERROR: setea PARCHER_LANDING_DISTRO con el ID de CloudFront antes de correr."
-  exit 1
-fi
+DISTRIBUTION_ID="${PARCHER_LANDING_DISTRO:-E24RGSFRFUFZGX}"
+PROFILE="${PARCHER_AWS_PROFILE:-parcher}"
 
 cd "$(dirname "$0")"
 
-echo "→ sync a s3://$BUCKET/"
-aws s3 sync . "s3://$BUCKET/" \
+echo "→ sync a s3://$BUCKET/ (profile=$PROFILE)"
+# ────────────────────────────────────────────────────────────────────────────
+# ⚠️  BLINDAJE PRERENDER — NO QUITAR LOS --exclude DE "e/*" Y "api/*"
+# El backend escribe HTMLs prerenderizados por evento en /e/<uuid>.html y
+# payloads JSON en /api/v1/events/<uuid>.json sobre ESTE MISMO BUCKET.
+# Como abajo usamos --delete, un sync sin estos excludes BORRARÍA los 15k+
+# prerenders en cada deploy del landing. Si necesitas limpiar prerenders,
+# hacelo explícito desde el script de backfill del backend, NUNCA desde acá.
+# Tracking: github.com/Parcher-ia/parcher-ia-backend (prerender feature).
+# ────────────────────────────────────────────────────────────────────────────
+aws --profile "$PROFILE" s3 sync . "s3://$BUCKET/" \
   --delete \
   --exclude ".git/*" \
   --exclude "*.md" \
   --exclude "deploy.sh" \
+  --exclude "cloudfront-rewrite.js" \
   --exclude ".gitignore" \
-  --exclude ".DS_Store"
+  --exclude ".DS_Store" \
+  --exclude "e/*" \
+  --exclude "api/*"
 
 echo "→ invalidando CloudFront ($DISTRIBUTION_ID)"
-INV_ID=$(aws cloudfront create-invalidation \
+INV_ID=$(aws --profile "$PROFILE" cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION_ID" \
   --paths "/*" \
   --query 'Invalidation.Id' --output text)
 
 echo "✓ invalidación creada: $INV_ID"
-echo "  status: aws cloudfront get-invalidation --distribution-id $DISTRIBUTION_ID --id $INV_ID"
+echo "  status: aws --profile $PROFILE cloudfront get-invalidation --distribution-id $DISTRIBUTION_ID --id $INV_ID"
+echo ""
+echo "URLs:"
+echo "  https://parcher.co"
+echo "  https://www.parcher.co"
+echo "  https://d27jwgf7l2eby6.cloudfront.net  (origen CloudFront directo)"
