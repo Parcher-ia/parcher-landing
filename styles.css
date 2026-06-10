@@ -1178,6 +1178,28 @@ footer a:hover { color: var(--color-ink); }
 /* WhatsApp pill toma el verde oficial en hover · tinte de marca para ese path */
 .ev-action-whatsapp:hover { background: #25D366; color: #fff; border-color: #25D366; }
 
+/* Variant del botón WhatsApp cuando es contacto explícito del evento (Detalles).
+   Vive verde permanente (no solo en hover): es CTA, no decorativo. */
+.ev-action-contact {
+  background: #25D366;
+  color: #fff;
+  border-color: #25D366;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 12px var(--space-5);
+}
+.ev-action-contact:hover { background: #1FB855; border-color: #1FB855; color: #fff; }
+
+.ev-contact-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
 /* Legacy: el ev-action-ico viejo (texto unicode) lo dejamos por si lo usa otra page */
 .ev-action-ico { font-family: var(--font-mono); font-weight: 700; }
 

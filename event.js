@@ -842,31 +842,34 @@
     if (ticketing.whatsapp || ticketing.phone) {
       var waDigits = ticketing.whatsapp ? String(ticketing.whatsapp).replace(/\D/g, '') : '';
       var phoneDigits = ticketing.phone ? String(ticketing.phone).replace(/\D/g, '') : '';
-      var contactBits = [];
+      // Contacto como botón verde de WhatsApp con icono · arranca chat de WA.
+      // Phone se renderea como segundo botón sólo si es DIFERENTE al de WA
+      // (dedupe contra dato cruzado del backend).
+      var contactButtons = [];
       if (waDigits) {
-        contactBits.push(
-          'WhatsApp: <a href="https://wa.me/' +
-            escapeHtml(waDigits) +
-            '" target="_blank" rel="noopener">' +
-            escapeHtml(ticketing.whatsapp) +
-            '</a>'
+        contactButtons.push(
+          '<a class="ev-action ev-action-whatsapp ev-action-contact" href="https://wa.me/' +
+          escapeHtml(waDigits) +
+          '" target="_blank" rel="noopener" aria-label="abrir WhatsApp con ' +
+          escapeHtml(ticketing.whatsapp) +
+          '">' + WA_ICON +
+          '<span>WhatsApp · ' + escapeHtml(ticketing.whatsapp) + '</span></a>'
         );
       }
-      // El teléfono también arranca chat de WhatsApp si está disponible y no
-      // es el mismo número que el de WhatsApp (dedupe contra dato cruzado).
       if (phoneDigits && phoneDigits !== waDigits) {
-        contactBits.push(
-          'Tel: <a href="https://wa.me/' +
-            escapeHtml(phoneDigits) +
-            '" target="_blank" rel="noopener">' +
-            escapeHtml(ticketing.phone) +
-            '</a>'
+        contactButtons.push(
+          '<a class="ev-action ev-action-whatsapp ev-action-contact" href="https://wa.me/' +
+          escapeHtml(phoneDigits) +
+          '" target="_blank" rel="noopener" aria-label="abrir WhatsApp con ' +
+          escapeHtml(ticketing.phone) +
+          '">' + WA_ICON +
+          '<span>WhatsApp · ' + escapeHtml(ticketing.phone) + '</span></a>'
         );
       }
       detailParts.push(
-        '<div class="ev-rich"><h3>contacto</h3><p>' +
-          contactBits.join(' · ') +
-          '</p></div>'
+        '<div class="ev-rich"><h3>contacto</h3>' +
+        '<div class="ev-contact-buttons">' + contactButtons.join('') + '</div>' +
+        '</div>'
       );
     }
     var detailsHtml = '';
