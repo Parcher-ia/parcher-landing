@@ -637,14 +637,13 @@ footer a:hover { color: var(--color-ink); }
   padding: var(--space-7) 0;
   border-bottom: 1px solid var(--color-line);
 }
+/* El padding lateral lo hereda del .container wrapper para alinear con el resto
+   del contenido (antes el padding propio dejaba el logo más a la izquierda que
+   los chips/títulos en pantallas anchas). */
 .ev-header .ev-brand {
   display: inline-flex;
   align-items: center;
   gap: var(--space-4);
-  padding: 0 var(--space-7);
-}
-@media (min-width: 1024px) {
-  .ev-header .ev-brand { padding: 0 var(--space-10); }
 }
 .ev-brand img { width: 36px; height: 36px; }
 .ev-brand span {
@@ -718,27 +717,44 @@ footer a:hover { color: var(--color-ink); }
 /* En desktop el cover queda dentro de la columna izquierda del grid 2-col
    (ev-hero-top), que ya está capada a 420px. Acá no necesita más cap. */
 
-/* ── Hero · 2-col grid en desktop (Opción A · cover|info) ──────────────────
-   Mobile: stack normal (cover full-bleed, info debajo).
-   Desktop ≥768px: poster izq (~340px), info der (title+meta).
-   El hero-top va capado al MISMO max-width que lentes/descripción (720px)
-   pa' que el título no rebase visualmente el margen de las lentes.
-   Todo lo demás del hero (lineup, descripción, disclaimer, actions) sigue
-   full-width abajo porque necesita respirar / mejor lectura. */
+/* ── Hero · grid con áreas (Opción A + lentes a la derecha) ────────────────
+   Mobile: 1 col stack → lentes, poster, info.
+   Desktop ≥768px: 2 cols. Poster spans las 2 filas (poster | lentes / info).
+     ┌────────┬─────────────────┐
+     │ poster │ lentes          │
+     │ poster │ title + meta    │
+     └────────┴─────────────────┘
+   Capado a 720px max pa' alinear con descripción / lineup full-width abajo.
+   Una sola copia de las lentes en HTML; el reposicionamiento es por
+   grid-template-areas, sin duplicación. */
 .ev-hero-top {
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "lentes"
+    "poster"
+    "info";
+  gap: var(--space-5);
   margin-bottom: var(--space-7);
 }
+.ev-hero-lentes-area { grid-area: lentes; }
+.ev-hero-poster-col  { grid-area: poster; min-width: 0; }
+.ev-hero-info-col    { grid-area: info; min-width: 0; }
+/* En mobile las lentes-area no debe doble-margen abajo (el grid-gap ya separa). */
+.ev-hero-lentes-area .ev-lentes { margin: 0; }
+
 @media (min-width: 768px) {
   .ev-hero-top {
-    display: grid;
     grid-template-columns: minmax(260px, 340px) 1fr;
-    gap: var(--space-7);
-    align-items: start;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "poster lentes"
+      "poster info";
+    column-gap: var(--space-7);
+    row-gap: var(--space-5);
     max-width: 720px;
+    align-items: start;
   }
-  .ev-hero-poster-col { min-width: 0; }
-  .ev-hero-info-col   { min-width: 0; }
   .ev-hero-info-col .ev-title {
     margin-top: 0;
     /* Título constrain dentro del info-col · clamp más conservador

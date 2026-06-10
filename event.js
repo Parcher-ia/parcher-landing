@@ -661,11 +661,15 @@
           (venueCity ? chip(venueCity, 'city') : '') +
         '</div>' +
       '</div>';
+    // Layout: en desktop usamos grid-template-areas para que las lentes vayan
+    // a la derecha del poster (arriba del título). En mobile el flow normal
+    // del grid (1 col) las pone arriba de todo. Una sola copia del HTML de
+    // lentes — el reposicionamiento es 100% CSS, sin duplicación.
     var heroHtml =
       '<section class="ev-hero">' +
       '<div class="container">' +
-      lentesHtml +
       '<div class="ev-hero-top">' +
+        '<div class="ev-hero-lentes-area">' + lentesHtml + '</div>' +
         heroPosterCol +
         heroInfoCol +
       '</div>' +
