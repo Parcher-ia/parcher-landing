@@ -44,7 +44,7 @@ aws --profile "$PROFILE" s3 sync . "s3://$BUCKET/" \
   --exclude "deploy.sh" \
   --exclude "cloudfront-rewrite.js" \
   --exclude ".gitignore" \
-  --exclude ".DS_Store" \
+  --exclude "*.DS_Store" \
   --exclude "scripts/*" \
   --exclude "e/*" \
   --exclude "api/*"
