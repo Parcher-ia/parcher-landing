@@ -717,39 +717,59 @@ footer a:hover { color: var(--color-ink); }
 /* En desktop el cover queda dentro de la columna izquierda del grid 2-col
    (ev-hero-top), que ya está capada a 420px. Acá no necesita más cap. */
 
-/* ── Hero · grid con áreas (Opción A + lentes a la derecha) ────────────────
-   Mobile: 1 col stack → lentes, poster, info.
-   Desktop ≥768px: 2 cols. Poster spans las 2 filas (poster | lentes / info).
-     ┌────────┬─────────────────┐
-     │ poster │ lentes          │
-     │ poster │ title + meta    │
-     └────────┴─────────────────┘
-   Capado a 720px max pa' alinear con descripción / lineup full-width abajo.
-   Una sola copia de las lentes en HTML; el reposicionamiento es por
-   grid-template-areas, sin duplicación. */
+/* ── Hero · grid completa con áreas ────────────────────────────────────────
+   TODO el hero (lentes, poster, info, lineup, descripción, disclaimer, CTAs)
+   vive adentro del ev-hero-top usando grid-template-areas.
+
+   Mobile (1 col): stack en HTML order
+     lentes → poster → info → lineup → descripción → disclaimer → CTAs.
+
+   Desktop ≥768px (2 cols, poster row-spans 3 filas a la izquierda):
+     ┌────────┬──────────────────────┐
+     │        │ lentes               │
+     │ poster │ title + meta         │
+     │        │ CTAs                 │
+     ├────────┴──────────────────────┤
+     │ lineup (full-width)           │
+     │ descripción (full-width)      │
+     │ disclaimer (full-width)       │
+     └───────────────────────────────┘
+
+   Cero duplicación HTML · todo es reposicionamiento por areas.
+   Reset márgenes en los grid items (el row-gap maneja separación). */
 .ev-hero-top {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas:
     "lentes"
     "poster"
-    "info";
+    "info"
+    "lineup"
+    "description"
+    "disclaimer"
+    "ctas";
   gap: var(--space-5);
   margin-bottom: var(--space-7);
 }
 .ev-hero-lentes-area { grid-area: lentes; }
 .ev-hero-poster-col  { grid-area: poster; min-width: 0; }
 .ev-hero-info-col    { grid-area: info; min-width: 0; }
-/* En mobile las lentes-area no debe doble-margen abajo (el grid-gap ya separa). */
-.ev-hero-lentes-area .ev-lentes { margin: 0; }
+.ev-hero-top .ev-lineup           { grid-area: lineup; margin: 0; }
+.ev-hero-top .ev-description      { grid-area: description; margin: 0; }
+.ev-hero-top .ev-disclaimer-top   { grid-area: disclaimer; margin: 0; }
+.ev-hero-top .ev-actions-row-hero { grid-area: ctas; margin: 0; }
+.ev-hero-lentes-area .ev-lentes   { margin: 0; }
 
 @media (min-width: 768px) {
   .ev-hero-top {
     grid-template-columns: minmax(260px, 340px) 1fr;
-    grid-template-rows: auto 1fr;
     grid-template-areas:
       "poster lentes"
-      "poster info";
+      "poster info"
+      "poster ctas"
+      "lineup lineup"
+      "description description"
+      "disclaimer disclaimer";
     column-gap: var(--space-7);
     row-gap: var(--space-5);
     max-width: 720px;

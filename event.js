@@ -661,10 +661,19 @@
           (venueCity ? chip(venueCity, 'city') : '') +
         '</div>' +
       '</div>';
-    // Layout: en desktop usamos grid-template-areas para que las lentes vayan
-    // a la derecha del poster (arriba del título). En mobile el flow normal
-    // del grid (1 col) las pone arriba de todo. Una sola copia del HTML de
-    // lentes — el reposicionamiento es 100% CSS, sin duplicación.
+    // Layout: TODO el hero (lentes, poster, info, lineup, desc, disclaimer,
+    // CTAs) vive dentro del ev-hero-top usando grid-template-areas.
+    // Mobile sigue el HTML order natural (1 col), desktop reorganiza:
+    //   ┌────────┬──────────────────────┐
+    //   │        │ lentes               │
+    //   │ poster │ title + meta         │
+    //   │        │ CTAs                 │
+    //   ├────────┴──────────────────────┤
+    //   │ lineup (full-width)           │
+    //   │ descripción (full-width)      │
+    //   │ disclaimer (full-width)       │
+    //   └───────────────────────────────┘
+    // Una sola copia del HTML, reposicionamiento 100% CSS.
     var heroHtml =
       '<section class="ev-hero">' +
       '<div class="container">' +
@@ -672,11 +681,11 @@
         '<div class="ev-hero-lentes-area">' + lentesHtml + '</div>' +
         heroPosterCol +
         heroInfoCol +
+        heroLineupHtml +
+        heroDescHtml +
+        disclaimerHtml +
+        heroCtasHtml +
       '</div>' +
-      heroLineupHtml +
-      heroDescHtml +
-      disclaimerHtml +
-      heroCtasHtml +
       '</div></section>';
 
     // ─── TAGS / CHIPS (footer del flow) ────────────────────
