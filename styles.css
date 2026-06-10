@@ -659,17 +659,18 @@ footer a:hover { color: var(--color-ink); }
 .ev-hero { padding-top: var(--space-10); }
 
 /* ── Lentes (ADR 013 · Cuándo / Dónde / Cuánto) · top del hero ─────────────
-   Cada chip es una card stamp con border-top de color por categoría:
+   Cards compactas con border-top de color por categoría:
      Cuándo → --color-pacific (musgo · tiempo/serenidad)
      Dónde  → --color-cali    (mango · territorial/CALI)
      Cuánto → --marca         (magenta · valor)
-   El grid hace wrap en mobile (1 col), 3 col desde tablet. */
+   1 col en mobile, 3 col desde tablet. Sin stamp shadow pa' que se sientan
+   como filtros, no como cards independientes. */
 .ev-lentes {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-3);
+  gap: var(--space-2);
   max-width: 720px;
-  margin: 0 0 var(--space-7);
+  margin: 0 0 var(--space-6);
 }
 @media (min-width: 600px) {
   .ev-lentes { grid-template-columns: repeat(3, 1fr); }
@@ -677,28 +678,27 @@ footer a:hover { color: var(--color-ink); }
 .ev-lens-chip {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: var(--space-4) var(--space-5);
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
   background: var(--color-crema);
   border: 1px solid var(--color-line);
   border-top-width: 3px;
-  border-radius: var(--radius-md);
-  box-shadow: 0 3px 0 var(--tinta);
+  border-radius: var(--radius-sm);
 }
 .ev-lens-when   { border-top-color: var(--color-pacific); }
 .ev-lens-where  { border-top-color: var(--color-cali); }
 .ev-lens-budget { border-top-color: var(--marca); }
 .ev-lens-label {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-fg-muted);
 }
 .ev-lens-value {
   font-family: var(--font-display);
-  font-size: clamp(15px, 1.9vw, 18px);
+  font-size: clamp(13px, 1.6vw, 15px);
   font-weight: 600;
   letter-spacing: -0.012em;
   line-height: 1.2;
@@ -715,11 +715,29 @@ footer a:hover { color: var(--color-ink); }
   border: 1px solid var(--color-line);
   box-shadow: 0 6px 0 var(--color-ink);
 }
-/* En desktop el aspect-ratio 4/5 hace que 720px de ancho den 900px de alto
-   y se coma media pantalla del laptop. Capamos a 420px desde tablet para
-   que el poster se sienta como cover, no como hero-image. */
+/* En desktop el cover queda dentro de la columna izquierda del grid 2-col
+   (ev-hero-top), que ya está capada a 420px. Acá no necesita más cap. */
+
+/* ── Hero · 2-col grid en desktop (Opción A · cover|info) ──────────────────
+   Mobile: stack normal (cover full-bleed, info debajo).
+   Desktop ≥768px: poster izq (420px max), info der (title+meta).
+   Todo lo demás del hero (lineup, descripción, disclaimer, actions) sigue
+   full-width abajo porque necesita respirar / mejor lectura. */
+.ev-hero-top {
+  display: block;
+  margin-bottom: var(--space-7);
+}
 @media (min-width: 768px) {
-  .ev-cover { max-width: 420px; }
+  .ev-hero-top {
+    display: grid;
+    grid-template-columns: minmax(280px, 420px) 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+  .ev-hero-poster-col { min-width: 0; }
+  .ev-hero-info-col   { min-width: 0; }
+  .ev-hero-info-col .ev-title { margin-top: 0; }
+  .ev-hero-poster-col .ev-source-mini { margin-bottom: 0; }
 }
 
 /* ── Fuente mini · texto bajo contraste justo debajo de la imagen ───────── */

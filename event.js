@@ -32,6 +32,25 @@
       .replace(/'/g, '&#39;');
   }
 
+  function formatDateRangeCompact(startsAt, isAllDay) {
+    // Variante corta pa' la lente "Cuándo" · "vie 5 sept · 7:00 pm".
+    // Mantiene día abreviado (no full "sábado") y mes corto.
+    if (!startsAt) return '';
+    var start = new Date(startsAt);
+    if (isNaN(start.getTime())) return '';
+    var dayStr = start.toLocaleDateString('es-CO', {
+      weekday: 'short', day: 'numeric', month: 'short',
+    }).replace(/,/g, '').replace(/\s+/g, ' ').trim();
+    if (isAllDay) return dayStr;
+    var isTimeTBD =
+      start.getUTCHours() === 0 &&
+      start.getUTCMinutes() === 0 &&
+      start.getUTCSeconds() === 0;
+    if (isTimeTBD) return dayStr;
+    var timeStr = start.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    return dayStr + ' · ' + timeStr;
+  }
+
   function formatDateRange(startsAt, endsAt, isAllDay) {
     if (!startsAt) return '';
     var start = new Date(startsAt);
@@ -462,12 +481,14 @@
     // que dejaba la descripción "perdida abajo" en el bloque "detalles".
 
     // 1 · Lentes (Cuándo/Dónde/Cuánto · ADR 013 · catalog.lenses.{when,where,budget}_labels.co)
+    //     formatDateRangeCompact → "vie 5 sept · 7:00 pm" (no full "sábado")
+    var whenCompact = formatDateRangeCompact(data.starts_at, data.is_all_day) || 'por confirmar';
     var lentesHtml =
       '<div class="ev-lentes" role="group" aria-label="lentes del evento">' +
         '<div class="ev-lens-chip ev-lens-when">' +
           '<span class="ev-lens-label">Cuándo</span>' +
           '<span class="ev-lens-value">' +
-          escapeHtml(whenStr || 'por confirmar') +
+          escapeHtml(whenCompact) +
           '</span>' +
         '</div>' +
         '<div class="ev-lens-chip ev-lens-where">' +
@@ -617,23 +638,36 @@
         ? '<div class="ev-actions-row ev-actions-row-hero">' + heroCtas.join('') + '</div>'
         : '';
 
+    // Opción A: 2-col grid en desktop · cover+source-mini izquierda, title+meta derecha.
+    // Mobile stack normal (un solo column). Lentes arriba, lineup/descripción/disclaimer/
+    // actions abajo full-width (no caben bien en la columna angosta o necesitan respirar).
+    // Meta drop date chip: el lens "Cuándo" arriba ya lo cubre · evitamos redundancia.
+    var coverHtmlInner = cover
+      ? '<div class="ev-cover"><img src="' +
+        escapeHtml(cover) + '" alt="" loading="eager" /></div>'
+      : '';
+    var heroPosterCol =
+      '<div class="ev-hero-poster-col">' +
+        coverHtmlInner +
+        sourceMiniHtml +
+      '</div>';
+    var heroInfoCol =
+      '<div class="ev-hero-info-col">' +
+        '<h1 class="ev-title">' +
+        escapeHtml(data.title || 'parche sin título') +
+        '</h1>' +
+        '<div class="ev-meta">' +
+          placeChipHtml +
+          (venueCity ? chip(venueCity, 'city') : '') +
+        '</div>' +
+      '</div>';
     var heroHtml =
       '<section class="ev-hero">' +
       '<div class="container">' +
       lentesHtml +
-      (cover
-        ? '<div class="ev-cover"><img src="' +
-          escapeHtml(cover) +
-          '" alt="" loading="eager" /></div>'
-        : '') +
-      sourceMiniHtml +
-      '<h1 class="ev-title">' +
-      escapeHtml(data.title || 'parche sin título') +
-      '</h1>' +
-      '<div class="ev-meta">' +
-      (whenStr ? chip(whenStr, 'date') : '') +
-      placeChipHtml +
-      (venueCity ? chip(venueCity, 'city') : '') +
+      '<div class="ev-hero-top">' +
+        heroPosterCol +
+        heroInfoCol +
       '</div>' +
       heroLineupHtml +
       heroDescHtml +
