@@ -736,47 +736,6 @@ footer a:hover { color: var(--color-ink); }
   .ev-chip-link { transition: none !important; }
 }
 
-/* ----- source-original card (DESTACADA) ----- */
-.ev-source { padding-top: var(--space-7); padding-bottom: var(--space-7); }
-
-.ev-source-card {
-  display: inline-flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-4) var(--space-6);
-  background: transparent;
-  color: var(--color-ink);
-  border-left: 3px solid var(--color-magenta);
-  border-radius: 0;
-  transition: background .15s ease;
-  max-width: 720px;
-}
-.ev-source-card:hover  { background: rgba(230, 50, 130, 0.06); }
-.ev-source-card:active { background: rgba(230, 50, 130, 0.10); }
-
-.ev-source-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-fg-muted);
-}
-.ev-source-line {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  color: var(--color-ink);
-}
-.ev-source-line .arrow {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  color: var(--color-magenta);
-  margin-left: var(--space-2);
-}
-
 /* ----- básico ----- */
 .ev-basic .ev-summary {
   font-family: var(--font-display);
@@ -941,25 +900,64 @@ footer a:hover { color: var(--color-ink); }
 .ev-where .ev-venue-card { margin-bottom: var(--space-6); }
 .ev-where-chips { margin-top: var(--space-2); }
 
-/* ----- lineup ----- */
+/* ----- lineup · grid de cards (review G) ----- */
 .ev-lineup {
-  font-size: 15px;
-  line-height: 1.6;
-  margin: var(--space-5) 0 0;
-  padding: var(--space-4) var(--space-5);
-  background: rgba(15, 23, 48, 0.04);
-  border-left: 3px solid var(--color-ink);
-  border-radius: var(--radius-sm);
+  margin: var(--space-7) 0 0;
   max-width: 720px;
 }
-.ev-lineup-label {
+.ev-lineup-title {
   font-family: var(--font-mono);
   font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+  margin: 0 0 var(--space-4);
+}
+.ev-lineup-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+.ev-lineup-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-crema);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  box-shadow: 0 3px 0 var(--tinta);
+}
+/* is-headliner: nombre aparece en primary_artist · destaca con borde --marca */
+.ev-lineup-card.is-headliner {
+  border-color: var(--marca);
+  box-shadow: 0 3px 0 var(--marca);
+}
+.ev-lineup-role {
+  font-family: var(--font-mono);
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-fg-muted);
-  margin-right: var(--space-2);
+}
+.ev-lineup-card.is-headliner .ev-lineup-role { color: var(--marca); }
+.ev-lineup-name {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  color: var(--color-fg);
+}
+.ev-lineup-time {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-fg-muted);
 }
 
 /* ----- availability badge (junto al precio) ----- */
@@ -1152,5 +1150,5 @@ footer a:hover { color: var(--color-ink); }
 /* reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .ev-skeleton { animation: none !important; }
-  .ev-source-card, .ev-details summary .arrow { transition: none !important; }
+  .ev-details summary .arrow { transition: none !important; }
 }

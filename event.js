@@ -242,6 +242,71 @@
     return '';
   }
 
+  function formatRoleLabel(role) {
+    if (!role) return '';
+    return String(role).replace(/_/g, ' ').toLowerCase().trim();
+  }
+
+  function formatScheduledTime(t) {
+    if (!t) return '';
+    var d = new Date(t);
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+    }
+    // fallback: "HH:MM" puro (sin fecha) → AM/PM
+    var m = /^(\d{1,2}):(\d{2})/.exec(String(t));
+    if (!m) return '';
+    var hour = parseInt(m[1], 10);
+    var minute = parseInt(m[2], 10);
+    if (isNaN(hour) || isNaN(minute)) return '';
+    var period = hour >= 12 ? 'pm' : 'am';
+    var h12 = hour % 12 || 12;
+    return h12 + ':' + (minute < 10 ? '0' + minute : minute) + ' ' + period;
+  }
+
+  function buildArtistList(data) {
+    // El backend manda lineup como array de {artist, role, scheduled_time, ...}
+    // y a veces primary_artist como CSV con TODOS los nombres del array.
+    // Construimos una lista deduplicada preservando orden del array + role,
+    // marcando isHeadliner=true cuando el nombre aparece en primary_artist.
+    var lineupArr = Array.isArray(data.lineup) ? data.lineup : [];
+    var primaryRaw = data.primary_artist ? String(data.primary_artist) : '';
+    var primaryNames = primaryRaw
+      ? primaryRaw.split(/,\s*/).map(function (s) { return s.trim(); }).filter(Boolean)
+      : [];
+    var primarySet = Object.create(null);
+    primaryNames.forEach(function (n) { primarySet[n.toLowerCase()] = true; });
+
+    var seen = Object.create(null);
+    var artists = [];
+
+    lineupArr.forEach(function (a) {
+      if (!a) return;
+      var name = (typeof a === 'string') ? a : a.artist;
+      if (!name) return;
+      name = String(name).trim();
+      var key = name.toLowerCase();
+      if (seen[key]) return;
+      seen[key] = true;
+      artists.push({
+        name: name,
+        role: (typeof a === 'object' && a.role) ? a.role : '',
+        time: (typeof a === 'object' && a.scheduled_time) ? a.scheduled_time : '',
+        isHeadliner: !!primarySet[key],
+      });
+    });
+
+    // Nombres que vinieron sólo en primary_artist (no en lineupArr): siempre headliners.
+    primaryNames.forEach(function (name) {
+      var key = name.toLowerCase();
+      if (seen[key]) return;
+      seen[key] = true;
+      artists.push({ name: name, role: '', time: '', isHeadliner: true });
+    });
+
+    return artists;
+  }
+
   function pickPrimarySource(sources) {
     if (!sources || !sources.length) return null;
     var primary = sources.filter(function (s) {
@@ -340,36 +405,25 @@
       (venueCity ? chip(venueCity, 'city') : '') +
       '</div>' +
       // Disclaimer compacto justo debajo de los chips meta · voz parchero.
-      // Le decimos al usuario que parcher armó esto leyendo la fuente y que
-      // confirme ahí si duda, sin tono burocrático.
+      // Acá vive el único acceso a la fuente original — antes había un section
+      // aparte "FUENTE ORIGINAL · @handle en Instagram →" que era redundante
+      // con este link. Folded acá pa' ganar ritmo (review H).
       '<p class="ev-disclaimer-top">' +
       (primarySource && primarySource.source_url
-        ? 'esta info la armó parcher leyendo el <a href="' +
-          escapeHtml(primarySource.source_url) +
-          '" target="_blank" rel="noopener">post original</a> — confirmá ahí si dudás.'
+        ? 'esta info la armó parcher leyendo ' +
+          (primarySource.instagram_handle
+            ? 'el <a href="' +
+              escapeHtml(primarySource.source_url) +
+              '" target="_blank" rel="noopener">post de @' +
+              escapeHtml(primarySource.instagram_handle) +
+              '</a> en Instagram'
+            : 'el <a href="' +
+              escapeHtml(primarySource.source_url) +
+              '" target="_blank" rel="noopener">post original</a>') +
+          ' — confirmá ahí si dudás.'
         : 'esta info la armó parcher · puede tener errores.') +
       '</p>' +
       '</div></section>';
-
-    // ─── FUENTE ORIGINAL ───────────────────────────────────
-    var sourceBlockHtml = '';
-    if (primarySource && primarySource.source_url) {
-      var handleLabel = primarySource.instagram_handle
-        ? '@' + primarySource.instagram_handle + ' en Instagram'
-        : 'el post original en Instagram';
-      sourceBlockHtml =
-        '<section class="ev-source">' +
-        '<div class="container">' +
-        '<a class="ev-source-card" href="' +
-        escapeHtml(primarySource.source_url) +
-        '" target="_blank" rel="noopener">' +
-        '<div class="ev-source-eyebrow">fuente original</div>' +
-        '<div class="ev-source-line">' +
-        escapeHtml(handleLabel) +
-        ' <span class="arrow">→</span></div>' +
-        '</a>' +
-        '</div></section>';
-    }
 
     // ─── EL PARCHE (event-focused) ─────────────────────────
     var parcheParts = [];
@@ -394,41 +448,29 @@
           '</div>'
       );
     }
-    // Lineup / artista principal
-    // data.lineup viene como array de objetos {artist, role, scheduled_time, ...}
-    // — no como strings. Extraemos a.artist y dedupamos contra primary_artist
-    // (que el backend a veces emite como CSV con TODOS los nombres del array).
-    var lineupArr = Array.isArray(data.lineup) ? data.lineup : [];
-    if (data.primary_artist || lineupArr.length) {
-      var lineupBits = [];
-      var seenNames = Object.create(null);
-      function markSeen(name) {
-        var k = String(name).trim().toLowerCase();
-        if (k) seenNames[k] = true;
-      }
-      function alreadySeen(name) {
-        return !!seenNames[String(name).trim().toLowerCase()];
-      }
-      if (data.primary_artist) {
-        lineupBits.push(
-          '<strong>' + escapeHtml(data.primary_artist) + '</strong>'
+    // Lineup como grid de cards (review G) · cada artista una card con role,
+    // hora si la trae, y borde --marca cuando el nombre aparece en primary_artist
+    // (señal de "headliner" para multi-speaker conferences o festivals).
+    var artists = buildArtistList(data);
+    if (artists.length) {
+      var cardsHtml = artists.map(function (a) {
+        var roleLabel = formatRoleLabel(a.role);
+        var timeLabel = formatScheduledTime(a.time);
+        var cls = 'ev-lineup-card' + (a.isHeadliner ? ' is-headliner' : '');
+        return (
+          '<li class="' + cls + '">' +
+            (roleLabel ? '<span class="ev-lineup-role">' + escapeHtml(roleLabel) + '</span>' : '') +
+            '<span class="ev-lineup-name">' + escapeHtml(a.name) + '</span>' +
+            (timeLabel ? '<span class="ev-lineup-time">' + escapeHtml(timeLabel) + '</span>' : '') +
+          '</li>'
         );
-        String(data.primary_artist).split(/,\s*/).forEach(markSeen);
-      }
-      lineupArr.forEach(function (a) {
-        if (!a) return;
-        var name = typeof a === 'string' ? a : a.artist;
-        if (!name || alreadySeen(name)) return;
-        markSeen(name);
-        lineupBits.push(escapeHtml(String(name).trim()));
-      });
-      if (lineupBits.length) {
-        parcheParts.push(
-          '<div class="ev-lineup"><span class="ev-lineup-label">lineup:</span> ' +
-            lineupBits.join(' · ') +
-            '</div>'
-        );
-      }
+      }).join('');
+      parcheParts.push(
+        '<div class="ev-lineup">' +
+          '<p class="ev-lineup-title">lineup</p>' +
+          '<ul class="ev-lineup-list">' + cardsHtml + '</ul>' +
+        '</div>'
+      );
     }
     // Precio + tier + availability badge
     var priceBits = [];
@@ -674,7 +716,7 @@
       '</div></section>';
 
     root.innerHTML =
-      heroHtml + sourceBlockHtml + parcheHtml + dondeHtml + detailsHtml + ctaFinalHtml;
+      heroHtml + parcheHtml + dondeHtml + detailsHtml + ctaFinalHtml;
 
     if (data.title) {
       document.title = data.title + ' · parcher';
