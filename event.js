@@ -242,6 +242,57 @@
     return '';
   }
 
+  function formatLensWhere(data) {
+    var vp = data.venue_profile || {};
+    var zone = vp.zone || '';
+    var city = data.city || vp.city || '';
+    if (zone) {
+      var zoneLabel = zone.charAt(0).toUpperCase() + zone.slice(1).toLowerCase();
+      // "Sur de Cali" / "Norte de Cali" — más natural que "Sur · Cali".
+      return city ? zoneLabel + ' de ' + city : zoneLabel;
+    }
+    return city || 'por confirmar';
+  }
+
+  function formatLensBudget(data) {
+    var t = data.event_ticketing || {};
+    var f = (data.price_from != null) ? data.price_from : t.price_from;
+    var to = (data.price_to != null) ? data.price_to : t.price_to;
+    var cur = data.currency || t.currency || 'COP';
+    if (f === 0 || t.ticketing_type === 'free') return 'Gratis';
+    if (f && to && Number(f) !== Number(to)) return formatPrice(f, to, cur);
+    if (f) return formatPrice(f, null, cur);
+    var vp = data.venue_profile || {};
+    var level = vp.price_level ? String(vp.price_level).toLowerCase() : '';
+    var levelMap = { economico: 'Económico', económico: 'Económico', medio: 'Medio', alto: 'Premium' };
+    if (level && levelMap[level]) return levelMap[level];
+    return 'Consultar';
+  }
+
+  function splitFirstWord(text) {
+    // Para acento editorial §6.3 en la descripción: italic --marca en
+    // la primera palabra, resto en regular.
+    var s = String(text || '').trim();
+    if (!s) return { first: '', rest: '' };
+    var m = /^(\S+)(\s+)([\s\S]*)$/.exec(s);
+    if (!m) return { first: s, rest: '' };
+    return { first: m[1], rest: m[3] };
+  }
+
+  function pickHeroDescription(data, enr, descs) {
+    // Hero usa la versión más larga disponible · pull-down ordenado:
+    // description_extended → description_enriched → long → medium → short → short_summary.
+    return (
+      enr.description_extended ||
+      enr.description_enriched ||
+      descs.long ||
+      descs.medium ||
+      descs.short ||
+      data.short_summary ||
+      ''
+    );
+  }
+
   function formatRoleLabel(role) {
     if (!role) return '';
     return String(role).replace(/_/g, ' ').toLowerCase().trim();
@@ -373,6 +424,55 @@
     var descs = enr.descriptions || {};
 
     // ─── HERO ──────────────────────────────────────────────
+    // Composición (top → bottom):
+    //   1. lentes ADR 013 (Cuándo / Dónde / Cuánto) — visibilidad en parte superior
+    //   2. cover image
+    //   3. fuente mini · texto bajo contraste justo debajo de la imagen
+    //   4. título
+    //   5. meta row (date · venue clickable · city)
+    //   6. descripción larga · primera palabra italic --marca
+    //   7. disclaimer corto
+    // Esto reemplaza la composición vieja (meta+disclaimer pegados al título)
+    // que dejaba la descripción "perdida abajo" en el bloque "detalles".
+
+    // 1 · Lentes (Cuándo/Dónde/Cuánto · ADR 013 · catalog.lenses.{when,where,budget}_labels.co)
+    var lentesHtml =
+      '<div class="ev-lentes" role="group" aria-label="lentes del evento">' +
+        '<div class="ev-lens-chip ev-lens-when">' +
+          '<span class="ev-lens-label">Cuándo</span>' +
+          '<span class="ev-lens-value">' +
+          escapeHtml(whenStr || 'por confirmar') +
+          '</span>' +
+        '</div>' +
+        '<div class="ev-lens-chip ev-lens-where">' +
+          '<span class="ev-lens-label">Dónde</span>' +
+          '<span class="ev-lens-value">' +
+          escapeHtml(formatLensWhere(data)) +
+          '</span>' +
+        '</div>' +
+        '<div class="ev-lens-chip ev-lens-budget">' +
+          '<span class="ev-lens-label">Cuánto</span>' +
+          '<span class="ev-lens-value">' +
+          escapeHtml(formatLensBudget(data)) +
+          '</span>' +
+        '</div>' +
+      '</div>';
+
+    // 3 · Fuente mini (low-contrast just below image)
+    var sourceMiniHtml = '';
+    if (primarySource && primarySource.source_url) {
+      var sourceMiniLabel = primarySource.instagram_handle
+        ? 'info de @' + primarySource.instagram_handle + ' en Instagram'
+        : 'info del post original';
+      sourceMiniHtml =
+        '<a class="ev-source-mini" href="' +
+        escapeHtml(primarySource.source_url) +
+        '" target="_blank" rel="noopener">' +
+        escapeHtml(sourceMiniLabel) +
+        ' <span aria-hidden="true">↗</span></a>';
+    }
+
+    // 5 · Venue chip (Maps link reusado)
     var placeChipHtml = '';
     if (venueName) {
       if (mapsUrl) {
@@ -388,14 +488,35 @@
         placeChipHtml = chip(venueName, 'place');
       }
     }
+
+    // 6 · Descripción larga con acento §6.3 (primera palabra italic --marca)
+    var heroDescRaw = pickHeroDescription(data, enr, descs);
+    var heroDescHtml = '';
+    if (heroDescRaw) {
+      var parts = splitFirstWord(heroDescRaw);
+      heroDescHtml =
+        '<p class="ev-description">' +
+        '<span class="ev-description-accent">' + escapeHtml(parts.first) + '</span>' +
+        (parts.rest ? ' ' + escapeHtml(parts.rest) : '') +
+        '</p>';
+    }
+
+    // 7 · Disclaimer
+    var disclaimerHtml =
+      '<p class="ev-disclaimer-top">' +
+      'info armada por parcher — confirmá en la fuente si dudás.' +
+      '</p>';
+
     var heroHtml =
       '<section class="ev-hero">' +
       '<div class="container">' +
+      lentesHtml +
       (cover
         ? '<div class="ev-cover"><img src="' +
           escapeHtml(cover) +
           '" alt="" loading="eager" /></div>'
         : '') +
+      sourceMiniHtml +
       '<h1 class="ev-title">' +
       escapeHtml(data.title || 'parche sin título') +
       '</h1>' +
@@ -404,36 +525,15 @@
       placeChipHtml +
       (venueCity ? chip(venueCity, 'city') : '') +
       '</div>' +
-      // Disclaimer compacto justo debajo de los chips meta · voz parchero.
-      // Acá vive el único acceso a la fuente original — antes había un section
-      // aparte "FUENTE ORIGINAL · @handle en Instagram →" que era redundante
-      // con este link. Folded acá pa' ganar ritmo (review H).
-      '<p class="ev-disclaimer-top">' +
-      (primarySource && primarySource.source_url
-        ? 'esta info la armó parcher leyendo ' +
-          (primarySource.instagram_handle
-            ? 'el <a href="' +
-              escapeHtml(primarySource.source_url) +
-              '" target="_blank" rel="noopener">post de @' +
-              escapeHtml(primarySource.instagram_handle) +
-              '</a> en Instagram'
-            : 'el <a href="' +
-              escapeHtml(primarySource.source_url) +
-              '" target="_blank" rel="noopener">post original</a>') +
-          ' — confirmá ahí si dudás.'
-        : 'esta info la armó parcher · puede tener errores.') +
-      '</p>' +
+      heroDescHtml +
+      disclaimerHtml +
       '</div></section>';
 
     // ─── EL PARCHE (event-focused) ─────────────────────────
+    // Sin ev-summary acá: la descripción larga vive ahora en el hero (review user).
+    // Esta section concentra los actionables: chips de vibe/tags/audience, lineup,
+    // precio, y CTAs de entradas/calendar/share.
     var parcheParts = [];
-    var summaryText =
-      data.short_summary || descs.short || descs.medium || '';
-    if (summaryText) {
-      parcheParts.push(
-        '<p class="ev-summary">' + escapeHtml(summaryText) + '</p>'
-      );
-    }
     var vibeChips = chipsFrom(data.vibe, 'vibe');
     var tagChips = chipsFrom(data.tags, 'tag');
     var audChips = chipsFrom(data.audience, 'aud');
@@ -586,23 +686,10 @@
     }
 
     // ─── DETALLES (continuous, no accordion) ───────────────
-    var elParche = enr.description_enriched || descs.medium || descs.short || '';
-    var masDetalles = enr.description_extended || descs.long || '';
+    // "el parche" y "más detalles" desaparecen acá: la versión más rica de la
+    // descripción ya vive en el hero. Lo que queda son datos estructurados:
+    // parent_event, subevents, enlaces, cómo entrar, contacto.
     var detailParts = [];
-    if (elParche && elParche !== summaryText) {
-      detailParts.push(
-        '<div class="ev-rich"><h3>el parche</h3><p>' +
-          escapeHtml(elParche) +
-          '</p></div>'
-      );
-    }
-    if (masDetalles && masDetalles !== elParche && masDetalles !== summaryText) {
-      detailParts.push(
-        '<div class="ev-rich"><h3>más detalles</h3><p>' +
-          escapeHtml(masDetalles) +
-          '</p></div>'
-      );
-    }
     if (data.parent_event && data.parent_event.id) {
       detailParts.push(
         '<div class="ev-rich"><h3>parte de</h3>' +

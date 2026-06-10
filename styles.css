@@ -658,15 +658,80 @@ footer a:hover { color: var(--color-ink); }
 /* ----- hero ----- */
 .ev-hero { padding-top: var(--space-10); }
 
+/* ── Lentes (ADR 013 · Cuándo / Dónde / Cuánto) · top del hero ─────────────
+   Cada chip es una card stamp con border-top de color por categoría:
+     Cuándo → --color-pacific (musgo · tiempo/serenidad)
+     Dónde  → --color-cali    (mango · territorial/CALI)
+     Cuánto → --marca         (magenta · valor)
+   El grid hace wrap en mobile (1 col), 3 col desde tablet. */
+.ev-lentes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  max-width: 720px;
+  margin: 0 0 var(--space-7);
+}
+@media (min-width: 600px) {
+  .ev-lentes { grid-template-columns: repeat(3, 1fr); }
+}
+.ev-lens-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-crema);
+  border: 1px solid var(--color-line);
+  border-top-width: 3px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 3px 0 var(--tinta);
+}
+.ev-lens-when   { border-top-color: var(--color-pacific); }
+.ev-lens-where  { border-top-color: var(--color-cali); }
+.ev-lens-budget { border-top-color: var(--marca); }
+.ev-lens-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+.ev-lens-value {
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.9vw, 18px);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  color: var(--color-fg);
+}
+
 .ev-cover {
   width: 100%;
   max-width: 720px;
-  margin: 0 0 var(--space-8);
+  margin: 0 0 var(--space-4);
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: rgba(15, 23, 48, 0.06);
   border: 1px solid var(--color-line);
   box-shadow: 0 6px 0 var(--color-ink);
+}
+
+/* ── Fuente mini · texto bajo contraste justo debajo de la imagen ───────── */
+.ev-source-mini {
+  display: inline-block;
+  margin: 0 0 var(--space-7);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--color-fg-muted);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--color-line);
+  padding-bottom: 1px;
+  transition: color .15s ease, border-color .15s ease;
+}
+.ev-source-mini:hover  { color: var(--marca); border-bottom-color: var(--marca); }
+@media (prefers-reduced-motion: reduce) {
+  .ev-source-mini { transition: none !important; }
 }
 .ev-cover img {
   width: 100%;
@@ -737,12 +802,21 @@ footer a:hover { color: var(--color-ink); }
 }
 
 /* ----- básico ----- */
-.ev-basic .ev-summary {
+/* ── Descripción larga del hero · primera palabra italic --marca (§6.3) ───── */
+.ev-description {
   font-family: var(--font-display);
-  font-size: clamp(19px, 2vw, 22px);
-  line-height: 1.4;
-  margin: 0 0 var(--space-7);
+  font-size: clamp(18px, 2vw, 21px);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.008em;
+  margin: var(--space-2) 0 var(--space-6);
   max-width: 720px;
+  color: var(--color-fg);
+}
+.ev-description-accent {
+  font-style: italic;
+  color: var(--marca);
+  font-weight: 600;
 }
 
 .ev-chiprow {
