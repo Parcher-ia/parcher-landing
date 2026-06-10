@@ -1013,13 +1013,17 @@ footer a:hover { color: var(--color-ink); }
 }
 
 .ev-rich { margin-bottom: var(--space-8); }
+/* h3s de bloques de "detalles" · firma editorial §6.3 (italic Fraunces en --marca).
+   Da jerarquía editorial vs el h2 de la sección y aporta el acento de marca a la página. */
 .ev-rich h3 {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-fg-muted);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(17px, 1.9vw, 20px);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  text-transform: none;
+  color: var(--marca);
   margin: 0 0 var(--space-4);
 }
 .ev-rich p {

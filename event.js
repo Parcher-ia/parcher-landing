@@ -339,15 +339,15 @@
       placeChipHtml +
       (venueCity ? chip(venueCity, 'city') : '') +
       '</div>' +
-      // Disclaimer compacto justo debajo de los chips meta, para que el
-      // usuario sepa de entrada que esto fue armado por IA y debe confirmar.
+      // Disclaimer compacto justo debajo de los chips meta · voz parchero.
+      // Le decimos al usuario que parcher armó esto leyendo la fuente y que
+      // confirme ahí si duda, sin tono burocrático.
       '<p class="ev-disclaimer-top">' +
-      'info armada por parcher leyendo el post original — puede tener errores.' +
       (primarySource && primarySource.source_url
-        ? ' confirma en el <a href="' +
+        ? 'esta info la armó parcher leyendo el <a href="' +
           escapeHtml(primarySource.source_url) +
-          '" target="_blank" rel="noopener">post original</a>.'
-        : '') +
+          '" target="_blank" rel="noopener">post original</a> — confirmá ahí si dudás.'
+        : 'esta info la armó parcher · puede tener errores.') +
       '</p>' +
       '</div></section>';
 
