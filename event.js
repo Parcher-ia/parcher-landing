@@ -507,6 +507,65 @@
       'info armada por parcher — confirmá en la fuente si dudás.' +
       '</p>';
 
+    // 8 · Actions row · subido al hero pa' que las acciones queden arriba,
+    //     no enterradas debajo del lineup. Iconos SVG inline:
+    //     - WhatsApp: bubble + acento del logo (recognizable a 16px).
+    //     - Calendar: outline minimal (head + body + month line).
+    //     - Entradas: cta-primary con --marca, sin icono (el botón ya es el call).
+    var WA_ICON =
+      '<svg class="ev-action-svg" viewBox="0 0 24 24" width="16" height="16" ' +
+      'fill="currentColor" aria-hidden="true">' +
+      '<path d="M12 2C6.48 2 2 6.48 2 12c0 1.77.46 3.45 1.32 4.95L2 22l5.25-1.31' +
+      'C8.65 21.53 10.27 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.07 14.18' +
+      'c-.21.59-1.23 1.13-1.7 1.2-.43.07-.99.1-1.6-.1-.37-.12-.84-.27-1.45-.53' +
+      '-2.55-1.1-4.21-3.67-4.33-3.85-.13-.17-1.04-1.38-1.04-2.63 0-1.25.66-1.87' +
+      '.89-2.12.23-.25.5-.32.67-.32.17 0 .33.01.48.01.15 0 .35-.06.55.42.21.5' +
+      '.69 1.74.75 1.87.06.13.1.27.02.45-.08.17-.13.27-.25.42-.13.15-.27.34-.38' +
+      '.45-.13.13-.26.27-.11.53.15.27.66 1.09 1.42 1.77.98.87 1.8 1.14 2.07 1.27' +
+      '.27.13.43.11.59-.07.16-.18.68-.79.86-1.07.18-.27.36-.23.6-.13.25.1 1.55' +
+      '.73 1.82.86.27.13.45.2.51.31.07.11.07.65-.14 1.24z"/></svg>';
+    var CAL_ICON =
+      '<svg class="ev-action-svg" viewBox="0 0 24 24" width="16" height="16" ' +
+      'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" ' +
+      'stroke-linejoin="round" aria-hidden="true">' +
+      '<rect x="3" y="4" width="18" height="18" rx="2"/>' +
+      '<line x1="16" y1="2" x2="16" y2="6"/>' +
+      '<line x1="8" y1="2" x2="8" y2="6"/>' +
+      '<line x1="3" y1="10" x2="21" y2="10"/></svg>';
+
+    var heroCtas = [];
+    if (ticketing.ticketing_url) {
+      var availHtmlHero = availabilityBadge(ticketing.availability_status);
+      heroCtas.push(
+        '<a class="cta-primary" href="' +
+          escapeHtml(ticketing.ticketing_url) +
+          '" target="_blank" rel="noopener">' +
+          '<span>conseguir entradas</span><span class="arrow">→</span></a>' +
+          (availHtmlHero ? availHtmlHero : '')
+      );
+    }
+    var calHrefHero = calendarHref(data);
+    if (calHrefHero) {
+      heroCtas.push(
+        '<a class="ev-action" href="' +
+          escapeHtml(calHrefHero) +
+          '" target="_blank" rel="noopener" aria-label="agregar al calendario">' +
+          CAL_ICON +
+          '<span>agregar al calendario</span></a>'
+      );
+    }
+    heroCtas.push(
+      '<a class="ev-action ev-action-whatsapp" href="' +
+        escapeHtml(whatsappShareHref(data)) +
+        '" target="_blank" rel="noopener" aria-label="compartir por WhatsApp">' +
+        WA_ICON +
+        '<span>compartir</span></a>'
+    );
+    var heroCtasHtml =
+      heroCtas.length
+        ? '<div class="ev-actions-row ev-actions-row-hero">' + heroCtas.join('') + '</div>'
+        : '';
+
     var heroHtml =
       '<section class="ev-hero">' +
       '<div class="container">' +
@@ -527,6 +586,7 @@
       '</div>' +
       heroDescHtml +
       disclaimerHtml +
+      heroCtasHtml +
       '</div></section>';
 
     // ─── EL PARCHE (event-focused) ─────────────────────────
@@ -572,51 +632,8 @@
         '</div>'
       );
     }
-    // Precio + tier + availability badge
-    var priceBits = [];
-    if (priceStr) priceBits.push(escapeHtml(priceStr));
-    if (ticketing.tier_name) priceBits.push(escapeHtml(ticketing.tier_name));
-    var availHtml = availabilityBadge(ticketing.availability_status);
-    if (priceBits.length || availHtml) {
-      parcheParts.push(
-        '<p class="ev-line"><strong>precio:</strong> ' +
-          (priceBits.join(' · ') || 'por confirmar') +
-          (availHtml ? ' ' + availHtml : '') +
-          '</p>'
-      );
-    }
-    // CTAs row: entradas + calendar + WhatsApp share
-    var ctasRow = [];
-    if (ticketing.ticketing_url) {
-      ctasRow.push(
-        '<a class="cta-primary" href="' +
-          escapeHtml(ticketing.ticketing_url) +
-          '" target="_blank" rel="noopener">' +
-          '<span>conseguir entradas</span><span class="arrow">→</span></a>'
-      );
-    }
-    var calHref = calendarHref(data);
-    if (calHref) {
-      ctasRow.push(
-        '<a class="ev-action" href="' +
-          escapeHtml(calHref) +
-          '" target="_blank" rel="noopener">' +
-          '<span class="ev-action-ico" aria-hidden="true">▣</span>' +
-          '<span>agregar al calendario</span></a>'
-      );
-    }
-    ctasRow.push(
-      '<a class="ev-action" href="' +
-        escapeHtml(whatsappShareHref(data)) +
-        '" target="_blank" rel="noopener">' +
-        '<span class="ev-action-ico" aria-hidden="true">↗</span>' +
-        '<span>compartir por WhatsApp</span></a>'
-    );
-    if (ctasRow.length) {
-      parcheParts.push(
-        '<div class="ev-actions-row">' + ctasRow.join('') + '</div>'
-      );
-    }
+    // Sin price line ni actions row acá: la lente Cuánto cubre el precio
+    // (lens budget · ADR 013), y las CTAs viven ahora en el hero.
     var parcheHtml =
       '<section class="ev-basic">' +
       '<div class="container">' +
@@ -660,12 +677,16 @@
           '" target="_blank" rel="noopener">' +
           '<span>ver en Maps</span><span class="arrow">→</span></a>';
       }
-      // Chips prácticos del lugar
+      // Chips prácticos del lugar · sólo logística del venue.
+      // sector_vibe + typical_audience del venue NO van acá: son chips estilo
+      // "vibe/aud" que se confunden con las del evento arriba (data.vibe/audience).
+      // El venue se distingue por sus datos logísticos: tipo, precio, transporte,
+      // parqueo y seguridad. La cantera enriquecedora (sector_vibe/typical_audience)
+      // queda en el payload pa' usos futuros (filtros, recomendaciones), pero no
+      // entra al detail render porque duplica visualmente con el evento.
       var venueChips = '';
       venueChips += chipsFrom(vp.venue_type, 'venue');
       if (vp.is_outdoor) venueChips += chip('al aire libre', 'venue');
-      venueChips += chipsFrom(vp.sector_vibe, 'vibe');
-      venueChips += chipsFrom(vp.typical_audience, 'aud');
       venueChips += venuePriceChip(vp.price_level);
       if (vp.has_transit_nearby)
         venueChips += chip('transporte público cerca', 'logistic');

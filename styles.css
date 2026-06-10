@@ -1055,13 +1055,19 @@ footer a:hover { color: var(--color-ink); }
 /* ----- safety chip ----- */
 .ev-chip-safety { background: rgba(230, 50, 130, 0.10); color: var(--color-ink); border-color: rgba(230, 50, 130, 0.3); }
 
-/* ----- acciones row (entradas + calendar + share) ----- */
+/* ----- acciones row (entradas + calendar + share) -----
+   Variante -hero: vive arriba en el ev-hero (debajo del disclaimer).
+   El cta-primary lidera, calendar + whatsapp son secundarias outlined. */
 .ev-actions-row {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-4);
   margin: var(--space-7) 0 0;
   align-items: center;
+}
+.ev-actions-row-hero {
+  margin: var(--space-7) 0 0;
+  max-width: 720px;
 }
 .ev-actions-row .cta-primary { margin: 0; }
 .ev-action {
@@ -1081,6 +1087,18 @@ footer a:hover { color: var(--color-ink); }
   transition: background .15s ease, color .15s ease;
 }
 .ev-action:hover { background: var(--color-ink); color: var(--color-crema); }
+
+/* SVG icons (whatsapp + calendar) · currentColor pa' que tomen el fill del link */
+.ev-action-svg {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+/* WhatsApp pill toma el verde oficial en hover · tinte de marca para ese path */
+.ev-action-whatsapp:hover { background: #25D366; color: #fff; border-color: #25D366; }
+
+/* Legacy: el ev-action-ico viejo (texto unicode) lo dejamos por si lo usa otra page */
 .ev-action-ico { font-family: var(--font-mono); font-weight: 700; }
 
 /* ----- detalles (continuous, sin acordeón) ----- */
