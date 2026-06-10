@@ -24,14 +24,14 @@
 </head>
 <body class="event-page">
 
-  <!-- header -->
+  <!-- header · Sin wrap de .container a propósito: el .ev-brand carga su
+       propia alineación (max-width + padding) en styles.css, así matchea
+       la estructura de los prerenders del backend sin requerir re-prerender. -->
   <header class="ev-header">
-    <div class="container">
-      <a class="ev-brand" href="/" aria-label="ir al inicio de parcher">
-        <img src="/assets/logo/parcher-monogram-avatar.svg" alt="" />
-        <span>parcher<span class="dot">.</span></span>
-      </a>
-    </div>
+    <a class="ev-brand" href="/" aria-label="ir al inicio de parcher">
+      <img src="/assets/logo/parcher-monogram-avatar.svg" alt="" />
+      <span>parcher<span class="dot">.</span></span>
+    </a>
   </header>
 
   <!-- root: el JS reemplaza este nodo según estado (loading / 404 / ok) -->

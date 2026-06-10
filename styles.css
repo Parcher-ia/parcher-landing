@@ -637,13 +637,22 @@ footer a:hover { color: var(--color-ink); }
   padding: var(--space-7) 0;
   border-bottom: 1px solid var(--color-line);
 }
-/* El padding lateral lo hereda del .container wrapper para alinear con el resto
-   del contenido (antes el padding propio dejaba el logo más a la izquierda que
-   los chips/títulos en pantallas anchas). */
+/* El .ev-brand se comporta como un .container propio: max-width + margin auto
+   + padding lateral igual a los del .container. Esto alinea el logo con el
+   contenido de los <section> aunque el .ev-brand NO esté wrapeado en un
+   .container — necesario porque los prerenders del backend tienen el
+   .ev-brand como hijo directo de .ev-header (sin wrap). En pantallas anchas
+   (≥1080px viewport) el container del contenido se centra y el logo lo sigue. */
 .ev-header .ev-brand {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--space-4);
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 var(--space-7);
+}
+@media (min-width: 1024px) {
+  .ev-header .ev-brand { padding: 0 var(--space-10); }
 }
 .ev-brand img { width: 36px; height: 36px; }
 .ev-brand span {
