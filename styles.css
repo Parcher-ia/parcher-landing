@@ -974,9 +974,11 @@ footer a:hover { color: var(--color-ink); }
 .ev-where .ev-venue-card { margin-bottom: var(--space-6); }
 .ev-where-chips { margin-top: var(--space-2); }
 
-/* ----- lineup · grid de cards (review G) ----- */
+/* ----- lineup · grid compacto de cards (review G + compactación) -----
+   Vive en el hero, encima de la descripción. Cards más chicas y sin
+   box-shadow stamp pa' no competir visualmente con el resto del hero. */
 .ev-lineup {
-  margin: var(--space-7) 0 0;
+  margin: var(--space-6) 0 var(--space-5);
   max-width: 720px;
 }
 .ev-lineup-title {
@@ -986,34 +988,33 @@ footer a:hover { color: var(--color-ink); }
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-fg-muted);
-  margin: 0 0 var(--space-4);
+  margin: 0 0 var(--space-3);
 }
 .ev-lineup-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: var(--space-2);
 }
 .ev-lineup-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-4) var(--space-5);
+  gap: 4px;
+  padding: var(--space-3) var(--space-4);
   background: var(--color-crema);
   border: 1px solid var(--color-line);
-  border-radius: var(--radius-md);
-  box-shadow: 0 3px 0 var(--tinta);
+  border-radius: var(--radius-sm);
 }
 /* is-headliner: nombre aparece en primary_artist · destaca con borde --marca */
 .ev-lineup-card.is-headliner {
   border-color: var(--marca);
-  box-shadow: 0 3px 0 var(--marca);
+  border-width: 1.5px;
 }
 .ev-lineup-role {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1022,15 +1023,15 @@ footer a:hover { color: var(--color-ink); }
 .ev-lineup-card.is-headliner .ev-lineup-role { color: var(--marca); }
 .ev-lineup-name {
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 600;
-  letter-spacing: -0.012em;
-  line-height: 1.2;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
   color: var(--color-fg);
 }
 .ev-lineup-time {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--color-fg-muted);
 }
 
@@ -1166,6 +1167,23 @@ footer a:hover { color: var(--color-ink); }
   font-size: 12px;
   color: var(--color-fg-muted);
 }
+
+/* ----- etiquetas (footer del flow · vibe/tags/audience/activity) -----
+   Bloque chico, quieto, low-emphasis · es discovery footprint, no señal. */
+.ev-tags {
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--color-line);
+}
+.ev-tags-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+  margin: 0 0 var(--space-4);
+}
+.ev-tags .ev-chiprow { margin: 0; max-width: 720px; }
 
 /* ----- CTA final ----- */
 .ev-cta-final {

@@ -489,7 +489,32 @@
       }
     }
 
-    // 6 · Descripción larga con acento §6.3 (primera palabra italic --marca)
+    // 6 · Lineup (si existe) · va ENCIMA de la descripción
+    //     porque para multi-speaker / festival / concierto, el lineup ES la
+    //     razón por la que vas. La descripción elabora después.
+    var heroArtists = buildArtistList(data);
+    var heroLineupHtml = '';
+    if (heroArtists.length) {
+      var heroCardsHtml = heroArtists.map(function (a) {
+        var roleLabel = formatRoleLabel(a.role);
+        var timeLabel = formatScheduledTime(a.time);
+        var cls = 'ev-lineup-card' + (a.isHeadliner ? ' is-headliner' : '');
+        return (
+          '<li class="' + cls + '">' +
+            (roleLabel ? '<span class="ev-lineup-role">' + escapeHtml(roleLabel) + '</span>' : '') +
+            '<span class="ev-lineup-name">' + escapeHtml(a.name) + '</span>' +
+            (timeLabel ? '<span class="ev-lineup-time">' + escapeHtml(timeLabel) + '</span>' : '') +
+          '</li>'
+        );
+      }).join('');
+      heroLineupHtml =
+        '<div class="ev-lineup">' +
+          '<p class="ev-lineup-title">lineup</p>' +
+          '<ul class="ev-lineup-list">' + heroCardsHtml + '</ul>' +
+        '</div>';
+    }
+
+    // 7 · Descripción larga con acento §6.3 (primera palabra italic --marca)
     var heroDescRaw = pickHeroDescription(data, enr, descs);
     var heroDescHtml = '';
     if (heroDescRaw) {
@@ -584,61 +609,31 @@
       placeChipHtml +
       (venueCity ? chip(venueCity, 'city') : '') +
       '</div>' +
+      heroLineupHtml +
       heroDescHtml +
       disclaimerHtml +
       heroCtasHtml +
       '</div></section>';
 
-    // ─── EL PARCHE (event-focused) ─────────────────────────
-    // Sin ev-summary acá: la descripción larga vive ahora en el hero (review user).
-    // Esta section concentra los actionables: chips de vibe/tags/audience, lineup,
-    // precio, y CTAs de entradas/calendar/share.
-    var parcheParts = [];
+    // ─── TAGS / CHIPS (footer del flow) ────────────────────
+    // Lineup ya vive en el hero; el "parche section" entero desaparece.
+    // Las chips de vibe/tags/audience/activity quedan acá como footprint
+    // de discovery (SEO + referencia rápida), entre detalles y CTA final.
     var vibeChips = chipsFrom(data.vibe, 'vibe');
     var tagChips = chipsFrom(data.tags, 'tag');
     var audChips = chipsFrom(data.audience, 'aud');
     var actChips = chipsFrom(data.activity_type, 'tag');
+    var tagsHtml = '';
     if (vibeChips || tagChips || audChips || actChips) {
-      parcheParts.push(
+      tagsHtml =
+        '<section class="ev-tags">' +
+        '<div class="container">' +
+        '<p class="ev-tags-eyebrow">etiquetas</p>' +
         '<div class="ev-chiprow">' +
-          vibeChips +
-          actChips +
-          tagChips +
-          audChips +
-          '</div>'
-      );
+          vibeChips + actChips + tagChips + audChips +
+        '</div>' +
+        '</div></section>';
     }
-    // Lineup como grid de cards (review G) · cada artista una card con role,
-    // hora si la trae, y borde --marca cuando el nombre aparece en primary_artist
-    // (señal de "headliner" para multi-speaker conferences o festivals).
-    var artists = buildArtistList(data);
-    if (artists.length) {
-      var cardsHtml = artists.map(function (a) {
-        var roleLabel = formatRoleLabel(a.role);
-        var timeLabel = formatScheduledTime(a.time);
-        var cls = 'ev-lineup-card' + (a.isHeadliner ? ' is-headliner' : '');
-        return (
-          '<li class="' + cls + '">' +
-            (roleLabel ? '<span class="ev-lineup-role">' + escapeHtml(roleLabel) + '</span>' : '') +
-            '<span class="ev-lineup-name">' + escapeHtml(a.name) + '</span>' +
-            (timeLabel ? '<span class="ev-lineup-time">' + escapeHtml(timeLabel) + '</span>' : '') +
-          '</li>'
-        );
-      }).join('');
-      parcheParts.push(
-        '<div class="ev-lineup">' +
-          '<p class="ev-lineup-title">lineup</p>' +
-          '<ul class="ev-lineup-list">' + cardsHtml + '</ul>' +
-        '</div>'
-      );
-    }
-    // Sin price line ni actions row acá: la lente Cuánto cubre el precio
-    // (lens budget · ADR 013), y las CTAs viven ahora en el hero.
-    var parcheHtml =
-      '<section class="ev-basic">' +
-      '<div class="container">' +
-      parcheParts.join('') +
-      '</div></section>';
 
     // ─── DÓNDE (venue-focused, promoted block) ─────────────
     // addrLine / hoodLine / mapsUrl ya computados arriba (reusados desde el hero).
@@ -823,8 +818,10 @@
       '<div class="cta-secondary">@soyparcher</div>' +
       '</div></section>';
 
+    // Orden: Hero (todo) → Dónde (justo después del actions row) → Detalles
+    // → Tags (etiquetas footprint) → CTA final.
     root.innerHTML =
-      heroHtml + parcheHtml + dondeHtml + detailsHtml + ctaFinalHtml;
+      heroHtml + dondeHtml + detailsHtml + tagsHtml + ctaFinalHtml;
 
     if (data.title) {
       document.title = data.title + ' · parcher';
