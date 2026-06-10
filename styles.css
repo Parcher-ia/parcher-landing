@@ -1,25 +1,22 @@
 /* parcher landing · styles.css
-   Design tokens: SSOT = marca_parcher/tokens.json v4.2 · catalog.json v2.0.0
-   Mirror local: assets/catalog/catalog.json (bajado por scripts/fetch-catalog.sh).
-   Cualquier cambio visual se valida contra /opt/parcher/marca_parcher/parcher-brand-book.md
-   Distribución canónica vía CDN: https://catalog.parcher.co/v1/catalog.css (TODO: import
-   cuando workspace publique catalog.css · hoy 403 · derivamos local desde catalog.json). */
+   Design tokens: SSOT = marca_parcher/tokens.json v4.3 · catalog v2.0.0
+   Foundationals + clusters + ocasiones: definidos en assets/catalog/catalog.css
+   (vendoreado desde marca_parcher/dist/catalog.css por scripts/fetch-catalog.sh).
+   Cuando workspace suba catalog.css al CDN, cambiar el @import por:
+     @import url('https://catalog.parcher.co/v1/catalog.css');
+   Cualquier cambio visual se valida contra /opt/parcher/marca_parcher/parcher-brand-book.md */
+@import url('./assets/catalog/catalog.css');
 
 :root {
-  /* ─── Foundationals v4 (los 3 intocables · NO cluster · SSOT tokens.json $.colors.foundational) */
-  --marca: #E63282;  /* magenta neón · logo + CTA primario · neón verdadero del sistema */
-  --tinta: #0F1730;  /* ink coloreado · texto default · NO negro neutro */
-  --crema: #FFF4E0;  /* background warm · papel imprenta caleña · NO blanco neutro */
-
-  /* ─── Family-level aliases (compat con código actual del landing)
-     TODO bloque B+: validar con Iris el mapping family→cluster representante v4
-       --color-cali    → ¿sol #E8C233 (with_family) o mango #D87A2C (COMIDA)?
-       --color-salsa   → candela #DC4D27 (RUMBA representante de SALSA)
-       --color-pacific → ¿musgo #5E8B6A (COMUNIDAD) o jade #5DC4A8 (WELLNESS)?
-     Por ahora preservamos hex v1 hasta decisión de marca. */
-  --color-cali:    #FFC91F;
-  --color-salsa:   #FF5C2A;
-  --color-pacific: #5E8B7E;
+  /* ─── Family-level aliases (mapping cerrado por Iris · 2026-06-10)
+     CALI    → mango   (ancla operativa de CALI · sol queda scoped a ocasión with_family)
+     SALSA   → candela (RUMBA representante directa)
+     PACIFIC → musgo   (COMUNIDAD · jade pide texto tinta y queda scoped a recharge)
+     Nota estructural §8.3: feed tags son contextos de cluster, no de family.
+     Estos --color-* son aliases temporales · migrar a cluster tokens directos al refactor. */
+  --color-cali:    var(--mango);
+  --color-salsa:   var(--candela);
+  --color-pacific: var(--musgo);
 
   /* ─── Aliases legacy (deprecados · apuntan a foundationals v4)
      El nombre "magenta" se reserva: en v4 NO es cluster, es --marca foundational. */
@@ -33,7 +30,8 @@
   --color-fg-muted:  rgba(15, 23, 48, 0.62);
   --color-line:      rgba(15, 23, 48, 0.12);
   --color-accent:    var(--marca);
-  --color-cta:       var(--color-cali);
+  /* CTA primario · regla §5.2.6: siempre --marca · cluster/family no lo reemplazan */
+  --color-cta:       var(--marca);
 
   /* Spacing scale (múltiplos de 4) */
   --space-2:  4px;
@@ -153,27 +151,6 @@ p { margin: 0 0 var(--space-5); }
   font-style: italic;
 }
 
-.hero-slogan {
-  display: flex;
-  align-items: center;
-  gap: var(--space-5);
-  margin: var(--space-5) 0 var(--space-8);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-fg);
-}
-
-.hero-slogan::before {
-  content: '';
-  flex: 0 0 56px;
-  height: 1px;
-  background: var(--color-fg);
-  opacity: 0.3;
-}
-
 .hero-tagline {
   font-family: var(--font-display);
   font-size: clamp(22px, 3vw, 30px);
@@ -182,13 +159,13 @@ p { margin: 0 0 var(--space-5); }
   max-width: 520px;
 }
 
-/* ----- CTA principal ----- */
+/* ----- CTA principal · regla §5.2.6: bg=--marca · fg=--crema (§5.5) ----- */
 .cta-primary {
   display: inline-flex;
   align-items: center;
   gap: var(--space-4);
-  background: var(--color-cali);
-  color: var(--color-ink);
+  background: var(--color-cta);
+  color: var(--crema);
   font-weight: 600;
   font-size: 17px;
   padding: 18px 28px;
@@ -270,6 +247,45 @@ p { margin: 0 0 var(--space-5); }
 .step-punch {
   display: block;
   margin-top: var(--space-2);
+}
+
+/* ----- 8 ocasiones · puertas de entrada del catalog SSOT ----- */
+.ocasiones {
+  text-align: center;
+}
+.ocasiones h2 { margin-bottom: var(--space-9); }
+
+.ocasiones-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 720px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.ocasion-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(15px, 1.6vw, 17px);
+  letter-spacing: -0.01em;
+  background: var(--c, var(--marca));
+  color: var(--ct, var(--crema));
+  transition: transform .15s ease, box-shadow .15s ease;
+  box-shadow: 0 3px 0 var(--tinta);
+  text-decoration: none;
+}
+.ocasion-chip:hover  { transform: translate(0, -2px); box-shadow: 0 5px 0 var(--tinta); }
+.ocasion-chip:active { transform: translate(0, 1px); box-shadow: 0 2px 0 var(--tinta); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ocasion-chip { transition: none !important; }
 }
 
 /* ----- chips de vibes ----- */

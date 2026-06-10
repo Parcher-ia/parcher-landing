@@ -62,19 +62,29 @@ echo "  version=$VERSION  checksum=${CHECKSUM:0:12}…"
 mv "$TMP_JSON" "$JSON_OUT"
 echo "✓ $JSON_OUT actualizado"
 
-# ── catalog.css (OPCIONAL por ahora — workspace todavía no lo subió) ───────
+# ── catalog.css (CDN primero · fallback a vendor local desde marca_parcher) ────
+# Iris cerró el archivo en marca_parcher/dist/catalog.css (v4.3) pero todavía
+# no aterrizó en el CDN. Mientras tanto, si el CDN responde 403 intentamos copiar
+# desde el repo de marca local (mismo SSOT). En CI/server donde marca_parcher no
+# esté disponible, queda pinned a la última versión versionada en assets/catalog/.
 echo "→ fetch $CSS_URL"
 TMP_CSS="$(mktemp)"
 HTTP_CODE=$(curl -sS -o "$TMP_CSS" -w "%{http_code}" "$CSS_URL" || echo "000")
 
 if [ "$HTTP_CODE" = "200" ]; then
   mv "$TMP_CSS" "$CSS_OUT"
-  echo "✓ $CSS_OUT actualizado"
+  echo "✓ $CSS_OUT actualizado desde CDN"
 else
-  echo "⚠ catalog.css HTTP $HTTP_CODE — todavía no publicado en el CDN"
-  echo "  bloque B (paleta v3) queda pendiente hasta que workspace lo suba"
   rm -f "$TMP_CSS"
-  # No fallar — el CSS aún no es bloqueante.
+  echo "⚠ catalog.css HTTP $HTTP_CODE en CDN — probando vendor local"
+
+  VENDOR_SRC="../marca_parcher/dist/catalog.css"
+  if [ -f "$VENDOR_SRC" ]; then
+    cp "$VENDOR_SRC" "$CSS_OUT"
+    echo "✓ $CSS_OUT actualizado desde $VENDOR_SRC (vendor local · cerrar workspace cuando suba al CDN)"
+  else
+    echo "  vendor local no disponible. Queda pinned a $CSS_OUT versionado en git."
+  fi
 fi
 
 echo ""

@@ -1,0 +1,47 @@
+/* parcher · catalog.css · generado desde tokens.json v4.3 · 2026-06-10
+   SSOT: marca_parcher/tokens.json · NO editar a mano — regenerar.
+   20 tokens: 3 foundational + 17 cluster (15 operativos + sol/rosa reasignados a ocasiones · ADR 013/014).
+   Regla §5.2.6: el CTA primario SIEMPRE usa --marca. Cluster/family tokens no lo reemplazan. */
+:root {
+  /* foundational · intocables */
+  --marca: #E63282;
+  --tinta: #0F1730;
+  --crema: #FFF4E0;
+
+  /* cluster · paleta v4 · fg = color de texto por regla §5.5 */
+  --candela: #DC4D27;  /* RUMBA · fg crema */
+  --mango: #D87A2C;  /* COMIDA · fg crema */
+  --tabaco: #5C3B22;  /* SABER · fg crema */
+  --fucsia: #C13D60;  /* CREATIVO · fg crema */
+  --musgo: #5E8B6A;  /* COMUNIDAD · fg crema */
+  --jade: #5DC4A8;  /* WELLNESS · fg tinta */
+  --cielo: #4B8FBF;  /* AIRE · fg crema */
+  --prusia: #1C3054;  /* CULTURA · fg crema */
+  --vino: #7A3D5E;  /* EMPRENDIMIENTO · fg crema */
+  --lavanda: #A088CC;  /* ESPIRITUAL · fg tinta */
+  --tinto: #3A1F4D;  /* NOCHE · fg crema */
+  --garra: #9E3322;  /* DEPORTE · fg crema */
+  --neón: #A12F86;  /* SHOW · fg crema */
+  --horizonte: #1F8E96;  /* EXPLORAR · fg crema */
+  --toldo: #B07A24;  /* EXPO · fg crema */
+
+  /* ex-cluster · colorean ocasiones (ADR 013) */
+  --sol: #E8C233;   /* ocasión with_family · fg tinta */
+  --rosa: #E5A0A8;  /* ocasión with_partner + pet-friendly · fg tinta */
+
+  /* ocasiones · Set F (ADR 013) · aliases para chips/covers/stickers */
+  --ocasion-live-shows: var(--neón);  /* Ver en vivo */
+  --ocasion-with-friends: var(--cielo);  /* Con el parche */
+  --ocasion-with-family: var(--sol);  /* Plan en familia */
+  --ocasion-with-partner: var(--rosa);  /* Con la pareja */
+  --ocasion-explore-city: var(--horizonte);  /* Descubrir la ciudad */
+  --ocasion-learn-create: var(--fucsia);  /* Aprender y crear */
+  --ocasion-recharge: var(--jade);  /* Recargar */
+  --ocasion-meet-people: var(--vino);  /* Conocer gente */
+
+  /* semantic */
+  --bg: var(--crema);
+  --fg: var(--tinta);
+  --accent: var(--marca);
+  --cta: var(--marca);
+}
