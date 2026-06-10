@@ -99,12 +99,11 @@
   }
 
   function venuePriceChip(level) {
-    // Etiquetado explícito: este es el rango típico del LUGAR (venue), no del evento.
-    if (!level) return '';
-    var map = { economico: '$', económico: '$', medio: '$$', alto: '$$$' };
-    var key = String(level).toLowerCase();
-    var sym = map[key] || String(level);
-    return chip('rango del lugar: ' + sym, 'price');
+    // Chip "rango del lugar" en la sección Dónde · referido al LUGAR, no al evento.
+    // Símbolo $/$$$/$$$ desde el map único de 3 niveles.
+    var info = priceLevelInfo(level);
+    if (!info) return '';
+    return chip('rango del lugar: ' + info.symbol, 'price');
   }
 
   function safetyChip(s) {
@@ -242,6 +241,30 @@
     return '';
   }
 
+  // ── Escala única de precio (3 niveles) ─────────────────────────────────
+  // Vocab canónico: economico | medio | alto (matchea venue_profiles.price_level
+  // del backend). Symbol $/$$$/$$$ y label se derivan de este mismo map en los
+  // dos render paths del detail: la lente "Cuánto" del hero (ADR 013) y la
+  // chip "rango del lugar" en la sección Dónde.
+  //
+  // Nota cross-vocab: la SSOT catalog.json define lenses.budget con valores
+  // free|low_cost|premium · esos son los buckets de FILTRO (catalog-facing).
+  // Para el render de un evento puntual la fuente real es venue.price_level
+  // o el price_from/to explícito; los buckets del lens son agregadores, no
+  // mapping 1-a-1 con el venue. Si Iris quiere unificar el catálogo a
+  // economico|medio|alto, es cambio en marca_parcher/tokens.json + ADR.
+  // Mientras tanto, el bridge vive acá.
+  var PRICE_LEVEL_MAP = {
+    economico:  { label: 'Económico', symbol: '$'   },
+    'económico':{ label: 'Económico', symbol: '$'   },
+    medio:      { label: 'Medio',     symbol: '$$'  },
+    alto:       { label: 'Alto',      symbol: '$$$' },
+  };
+  function priceLevelInfo(level) {
+    if (!level) return null;
+    return PRICE_LEVEL_MAP[String(level).toLowerCase()] || null;
+  }
+
   function formatLensWhere(data) {
     var vp = data.venue_profile || {};
     var zone = vp.zone || '';
@@ -255,6 +278,10 @@
   }
 
   function formatLensBudget(data) {
+    // Lente "Cuánto" del hero (ADR 013) · resuelve en este orden:
+    //   1. precio explícito del evento (gratis, rango, "desde X")
+    //   2. price_level del venue como fallback → label + symbol del map único
+    //   3. "Consultar" si no hay nada
     var t = data.event_ticketing || {};
     var f = (data.price_from != null) ? data.price_from : t.price_from;
     var to = (data.price_to != null) ? data.price_to : t.price_to;
@@ -263,9 +290,8 @@
     if (f && to && Number(f) !== Number(to)) return formatPrice(f, to, cur);
     if (f) return formatPrice(f, null, cur);
     var vp = data.venue_profile || {};
-    var level = vp.price_level ? String(vp.price_level).toLowerCase() : '';
-    var levelMap = { economico: 'Económico', económico: 'Económico', medio: 'Medio', alto: 'Premium' };
-    if (level && levelMap[level]) return levelMap[level];
+    var info = priceLevelInfo(vp.price_level);
+    if (info) return info.label + ' · ' + info.symbol;
     return 'Consultar';
   }
 
