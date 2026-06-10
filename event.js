@@ -297,6 +297,10 @@
     var vp = data.venue_profile || {};
     var venueName = data.place_name || vp.canonical_name || '';
     var venueCity = data.city || vp.city || '';
+    var addrLine = data.address || vp.address_line_1 || '';
+    var hoodLine = vp.neighborhood || '';
+    // mapsUrl computado upfront para reusarlo en el chip del hero y la card "Dónde".
+    var mapsUrl = mapsHref(vp, addrLine, venueName, venueCity);
     var whenStr = formatDateRange(data.starts_at, data.ends_at, data.is_all_day);
     var priceStr = formatPrice(data.price_from, data.price_to, data.currency);
     var ticketing = data.event_ticketing || {};
@@ -304,6 +308,21 @@
     var descs = enr.descriptions || {};
 
     // ─── HERO ──────────────────────────────────────────────
+    var placeChipHtml = '';
+    if (venueName) {
+      if (mapsUrl) {
+        placeChipHtml =
+          '<a class="ev-chip ev-chip-place ev-chip-link" href="' +
+          escapeHtml(mapsUrl) +
+          '" target="_blank" rel="noopener" aria-label="ver ' +
+          escapeHtml(venueName) +
+          ' en Google Maps">' +
+          escapeHtml(venueName) +
+          ' <span class="ev-chip-arrow" aria-hidden="true">↗</span></a>';
+      } else {
+        placeChipHtml = chip(venueName, 'place');
+      }
+    }
     var heroHtml =
       '<section class="ev-hero">' +
       '<div class="container">' +
@@ -317,7 +336,7 @@
       '</h1>' +
       '<div class="ev-meta">' +
       (whenStr ? chip(whenStr, 'date') : '') +
-      (venueName ? chip(venueName, 'place') : '') +
+      placeChipHtml +
       (venueCity ? chip(venueCity, 'city') : '') +
       '</div>' +
       // Disclaimer compacto justo debajo de los chips meta, para que el
@@ -447,9 +466,7 @@
       '</div></section>';
 
     // ─── DÓNDE (venue-focused, promoted block) ─────────────
-    var addrLine = data.address || vp.address_line_1 || '';
-    var hoodLine = vp.neighborhood || '';
-    var mapsUrl = mapsHref(vp, addrLine, venueName, venueCity);
+    // addrLine / hoodLine / mapsUrl ya computados arriba (reusados desde el hero).
     var hasVenue = !!(venueName || addrLine || hoodLine || mapsUrl);
     var dondeHtml = '';
     if (hasVenue) {

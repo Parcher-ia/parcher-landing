@@ -711,8 +711,26 @@ footer a:hover { color: var(--color-ink); }
 .ev-chip-tag   { background: rgba(15, 23, 48, 0.08); color: var(--color-ink); }
 .ev-chip-aud   { background: var(--color-pacific); color: #fff;             border-color: transparent; }
 .ev-chip-venue    { background: var(--color-salsa);   color: #fff;             border-color: transparent; }
-.ev-chip-price    { background: rgba(255, 201, 31, 0.18); color: var(--color-ink); border-color: var(--color-cali); }
-.ev-chip-logistic { background: rgba(94, 139, 126, 0.16); color: var(--color-ink); border-color: rgba(94, 139, 126, 0.4); }
+/* tints derivados de --color-cali (mango v4) y --color-pacific (musgo v4) — actualizados post bloque B. */
+.ev-chip-price    { background: rgba(216, 122, 44, 0.18); color: var(--color-ink); border-color: var(--color-cali); }
+.ev-chip-logistic { background: rgba(94, 139, 106, 0.16); color: var(--color-ink); border-color: rgba(94, 139, 106, 0.4); }
+
+/* ── Chip clickable (venue → Maps en el hero) · variant del ev-chip-place ─── */
+.ev-chip-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.ev-chip-link:hover  { transform: translate(0, -1px); box-shadow: 0 2px 0 var(--tinta); }
+.ev-chip-link:active { transform: translate(0, 1px); box-shadow: none; }
+.ev-chip-arrow {
+  margin-left: 6px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-chip-link { transition: none !important; }
+}
 
 /* ----- source-original card (DESTACADA) ----- */
 .ev-source { padding-top: var(--space-7); padding-bottom: var(--space-7); }
@@ -786,14 +804,15 @@ footer a:hover { color: var(--color-ink); }
   margin-right: var(--space-2);
 }
 
-/* ----- venue card (en básico) ----- */
+/* ----- venue card (en básico) ·
+   stamp box-shadow para que conviva con el resto del landing (CTA, dm-wrap, cover, feed-grid) ----- */
 .ev-venue-card {
   margin: var(--space-6) 0 var(--space-6);
   padding: var(--space-5);
   background: var(--color-crema);
   border: 1px solid var(--color-line);
-  border-left: 3px solid var(--color-ink);
   border-radius: var(--radius-md);
+  box-shadow: 0 4px 0 var(--tinta);
   max-width: 720px;
 }
 .ev-venue-name {
@@ -907,10 +926,11 @@ footer a:hover { color: var(--color-ink); }
   margin: 0 0 var(--space-5);
 }
 
-/* ----- Dónde (bloque promocionado del lugar) ----- */
+/* ----- Dónde (bloque promocionado del lugar) ·
+   tint warm derivado de --color-cali (mango v4) post bloque B ----- */
 .ev-where {
   padding: var(--space-8) 0;
-  background: rgba(255, 201, 31, 0.06);
+  background: rgba(216, 122, 44, 0.06);
   border-top: 1px solid var(--color-line);
   border-bottom: 1px solid var(--color-line);
 }
@@ -951,9 +971,10 @@ footer a:hover { color: var(--color-ink); }
   border-radius: 999px;
   vertical-align: middle;
 }
+/* tints derivados de --marca, --color-cali (mango v4), --color-pacific (musgo v4) */
 .ev-availability-soldout   { background: rgba(230, 50, 130, 0.12); color: var(--color-magenta); }
-.ev-availability-low       { background: rgba(255, 201, 31, 0.22); color: var(--color-ink); }
-.ev-availability-available { background: rgba(94, 139, 126, 0.18); color: var(--color-ink); }
+.ev-availability-low       { background: rgba(216, 122, 44, 0.22); color: var(--color-ink); }
+.ev-availability-available { background: rgba(94, 139, 106, 0.18); color: var(--color-ink); }
 
 /* ----- safety chip ----- */
 .ev-chip-safety { background: rgba(230, 50, 130, 0.10); color: var(--color-ink); border-color: rgba(230, 50, 130, 0.3); }
