@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>parcher · resolviendo parche</title>
+  <meta name="description" content="resolviendo el parche en parcher · vení, parchate." />
+
+  <!-- Redirige al evento canónico apenas resuelve · no indexar este shell -->
+  <meta name="robots" content="noindex, nofollow" />
+
+  <meta property="og:title" content="parcher · vení, parchate." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://parcher.co" />
+  <meta property="og:image" content="https://parcher.co/assets/og-image.png" />
+
+  <link rel="icon" type="image/svg+xml" href="/assets/logo/parcher-monogram-avatar.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="event-page">
+
+  <header class="ev-header">
+    <a class="ev-brand" href="/" aria-label="ir al inicio de parcher">
+      <img src="/assets/logo/parcher-monogram-avatar.svg" alt="" />
+      <span>parcher<span class="dot">.</span></span>
+    </a>
+  </header>
+
+  <!-- Loading skeleton mientras resuelve el shortcode → event_id -->
+  <main id="sc-root">
+    <section class="ev-state ev-loading" aria-busy="true" aria-live="polite">
+      <div class="container">
+        <div class="ev-skeleton ev-skeleton-hero"></div>
+        <div class="ev-skeleton ev-skeleton-line w70"></div>
+        <div class="ev-skeleton ev-skeleton-line w40"></div>
+        <div class="ev-skeleton ev-skeleton-line w80"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>parcher · nace en cali · 2026</div>
+      <div>
+        <a href="https://instagram.com/soyparcher" target="_blank" rel="noopener">@soyparcher</a>
+        &nbsp;·&nbsp;
+        <a href="mailto:hola@parcher.co">hola@parcher.co</a>
+      </div>
+    </div>
+    <div class="watermark" aria-hidden="true"></div>
+  </footer>
+
+  <script>
+    window.PARCHER_API_BASE = window.PARCHER_API_BASE || 'https://api.parcher.city';
+  </script>
+  <script src="/shortcode.js" defer></script>
+</body>
+</html>
