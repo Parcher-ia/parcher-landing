@@ -576,7 +576,7 @@
     // 7 · Disclaimer
     var disclaimerHtml =
       '<p class="ev-disclaimer-top">' +
-      'info armada por parcher — confirmá en la fuente si dudás.' +
+      'info armada por parcher usando IA — confirmá en la fuente si dudás.' +
       '</p>';
 
     // 8 · Actions row · subido al hero pa' que las acciones queden arriba,
