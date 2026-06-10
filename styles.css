@@ -1,22 +1,38 @@
 /* parcher landing · styles.css
-   Design tokens: brand book §9.1 (fuente de verdad).
-   Cualquier cambio visual se valida contra /opt/parcher/marca_parcher/parcher-brand-book.md */
+   Design tokens: SSOT = marca_parcher/tokens.json v4.2 · catalog.json v2.0.0
+   Mirror local: assets/catalog/catalog.json (bajado por scripts/fetch-catalog.sh).
+   Cualquier cambio visual se valida contra /opt/parcher/marca_parcher/parcher-brand-book.md
+   Distribución canónica vía CDN: https://catalog.parcher.co/v1/catalog.css (TODO: import
+   cuando workspace publique catalog.css · hoy 403 · derivamos local desde catalog.json). */
 
 :root {
-  /* Brand colors §5.1 */
+  /* ─── Foundationals v4 (los 3 intocables · NO cluster · SSOT tokens.json $.colors.foundational) */
+  --marca: #E63282;  /* magenta neón · logo + CTA primario · neón verdadero del sistema */
+  --tinta: #0F1730;  /* ink coloreado · texto default · NO negro neutro */
+  --crema: #FFF4E0;  /* background warm · papel imprenta caleña · NO blanco neutro */
+
+  /* ─── Family-level aliases (compat con código actual del landing)
+     TODO bloque B+: validar con Iris el mapping family→cluster representante v4
+       --color-cali    → ¿sol #E8C233 (with_family) o mango #D87A2C (COMIDA)?
+       --color-salsa   → candela #DC4D27 (RUMBA representante de SALSA)
+       --color-pacific → ¿musgo #5E8B6A (COMUNIDAD) o jade #5DC4A8 (WELLNESS)?
+     Por ahora preservamos hex v1 hasta decisión de marca. */
   --color-cali:    #FFC91F;
   --color-salsa:   #FF5C2A;
-  --color-ink:     #0F1730;
-  --color-crema:   #FFF4E0;
-  --color-magenta: #E63282;
   --color-pacific: #5E8B7E;
 
+  /* ─── Aliases legacy (deprecados · apuntan a foundationals v4)
+     El nombre "magenta" se reserva: en v4 NO es cluster, es --marca foundational. */
+  --color-ink:     var(--tinta);
+  --color-crema:   var(--crema);
+  --color-magenta: var(--marca);
+
   /* Semantic */
-  --color-bg:        var(--color-crema);
-  --color-fg:        var(--color-ink);
+  --color-bg:        var(--crema);
+  --color-fg:        var(--tinta);
   --color-fg-muted:  rgba(15, 23, 48, 0.62);
   --color-line:      rgba(15, 23, 48, 0.12);
-  --color-accent:    var(--color-magenta);
+  --color-accent:    var(--marca);
   --color-cta:       var(--color-cali);
 
   /* Spacing scale (múltiplos de 4) */
