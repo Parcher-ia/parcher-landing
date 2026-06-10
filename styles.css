@@ -720,7 +720,9 @@ footer a:hover { color: var(--color-ink); }
 
 /* ── Hero · 2-col grid en desktop (Opción A · cover|info) ──────────────────
    Mobile: stack normal (cover full-bleed, info debajo).
-   Desktop ≥768px: poster izq (420px max), info der (title+meta).
+   Desktop ≥768px: poster izq (~340px), info der (title+meta).
+   El hero-top va capado al MISMO max-width que lentes/descripción (720px)
+   pa' que el título no rebase visualmente el margen de las lentes.
    Todo lo demás del hero (lineup, descripción, disclaimer, actions) sigue
    full-width abajo porque necesita respirar / mejor lectura. */
 .ev-hero-top {
@@ -730,13 +732,21 @@ footer a:hover { color: var(--color-ink); }
 @media (min-width: 768px) {
   .ev-hero-top {
     display: grid;
-    grid-template-columns: minmax(280px, 420px) 1fr;
-    gap: var(--space-8);
+    grid-template-columns: minmax(260px, 340px) 1fr;
+    gap: var(--space-7);
     align-items: start;
+    max-width: 720px;
   }
   .ev-hero-poster-col { min-width: 0; }
   .ev-hero-info-col   { min-width: 0; }
-  .ev-hero-info-col .ev-title { margin-top: 0; }
+  .ev-hero-info-col .ev-title {
+    margin-top: 0;
+    /* Título constrain dentro del info-col · clamp más conservador
+       pa' que no rompa la columna con palabras muy largas. */
+    font-size: clamp(26px, 3.2vw, 38px);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
   .ev-hero-poster-col .ev-source-mini { margin-bottom: 0; }
 }
 
