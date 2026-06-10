@@ -715,6 +715,12 @@ footer a:hover { color: var(--color-ink); }
   border: 1px solid var(--color-line);
   box-shadow: 0 6px 0 var(--color-ink);
 }
+/* En desktop el aspect-ratio 4/5 hace que 720px de ancho den 900px de alto
+   y se coma media pantalla del laptop. Capamos a 420px desde tablet para
+   que el poster se sienta como cover, no como hero-image. */
+@media (min-width: 768px) {
+  .ev-cover { max-width: 420px; }
+}
 
 /* ── Fuente mini · texto bajo contraste justo debajo de la imagen ───────── */
 .ev-source-mini {
