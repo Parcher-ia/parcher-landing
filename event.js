@@ -395,16 +395,32 @@
       );
     }
     // Lineup / artista principal
+    // data.lineup viene como array de objetos {artist, role, scheduled_time, ...}
+    // — no como strings. Extraemos a.artist y dedupamos contra primary_artist
+    // (que el backend a veces emite como CSV con TODOS los nombres del array).
     var lineupArr = Array.isArray(data.lineup) ? data.lineup : [];
     if (data.primary_artist || lineupArr.length) {
       var lineupBits = [];
+      var seenNames = Object.create(null);
+      function markSeen(name) {
+        var k = String(name).trim().toLowerCase();
+        if (k) seenNames[k] = true;
+      }
+      function alreadySeen(name) {
+        return !!seenNames[String(name).trim().toLowerCase()];
+      }
       if (data.primary_artist) {
         lineupBits.push(
           '<strong>' + escapeHtml(data.primary_artist) + '</strong>'
         );
+        String(data.primary_artist).split(/,\s*/).forEach(markSeen);
       }
       lineupArr.forEach(function (a) {
-        if (a && a !== data.primary_artist) lineupBits.push(escapeHtml(a));
+        if (!a) return;
+        var name = typeof a === 'string' ? a : a.artist;
+        if (!name || alreadySeen(name)) return;
+        markSeen(name);
+        lineupBits.push(escapeHtml(String(name).trim()));
       });
       if (lineupBits.length) {
         parcheParts.push(
