@@ -883,7 +883,7 @@
     var ctaFinalHtml =
       '<section class="ev-cta-final">' +
       '<div class="container">' +
-      '<p class="ev-cta-eyebrow">¿no es lo tuyo?</p>' +
+      '<p class="ev-cta-eyebrow">hay más parches por descubrir</p>' +
       '<a class="cta-primary" href="' +
       DM_URL +
       '" target="_blank" rel="noopener">' +
