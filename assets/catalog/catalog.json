@@ -1,0 +1,669 @@
+{
+  "$metadata": {
+    "version": "2.0.0",
+    "tokens_source_version": "4.2",
+    "source": "marca_parcher/tokens.json",
+    "generator": "parcher-ia-backend/scripts/build-catalog.ts",
+    "generated_at": "2026-06-10T01:09:25.521Z",
+    "gaps": [
+      "vibe_to_cluster_hints: aún no canónico en tokens.json — stub vacío hasta que se ratifique en Fase 2 (Editor)."
+    ],
+    "checksum_sha256": "df3176fa12f7f75d4f6793b11d7be61eb9cde84eb55ea4142d5d31b9ebe66e5b"
+  },
+  "clusters_top_level": [
+    "CULTURA",
+    "CREATIVO",
+    "RUMBA",
+    "NOCHE",
+    "SHOW",
+    "COMIDA",
+    "AIRE",
+    "DEPORTE",
+    "SABER",
+    "EMPRENDIMIENTO",
+    "COMUNIDAD",
+    "ESPIRITUAL",
+    "WELLNESS",
+    "EXPO",
+    "EXPLORAR"
+  ],
+  "clusters": [
+    {
+      "name": "CULTURA",
+      "color_hex": "#1C3054",
+      "family": "INK",
+      "hashtag": "#cultura",
+      "top_level": true,
+      "sub_tags": [
+        "patrimonio",
+        "cine-autor",
+        "literatura",
+        "memoria-historica",
+        "escenicas-teatro",
+        "festival-tradicional",
+        "petronio-alvarez",
+        "chirimia-marimba",
+        "feria-cali",
+        "opening",
+        "residencia",
+        "charla-curatorial",
+        "bienal",
+        "galeria-comercial",
+        "instalacion",
+        "arte-callejero",
+        "feria-arte"
+      ],
+      "accepts_actions": [
+        "observar",
+        "presenciar",
+        "conversar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "CREATIVO",
+      "color_hex": "#C13D60",
+      "family": "MAGENTA",
+      "hashtag": "#creativo",
+      "top_level": true,
+      "sub_tags": [
+        "taller",
+        "mercado-diseno",
+        "zine",
+        "ceramica",
+        "ilustracion",
+        "fotografia",
+        "escritura-creativa",
+        "costura-textil"
+      ],
+      "accepts_actions": [
+        "aprender",
+        "jugar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "RUMBA",
+      "color_hex": "#DC4D27",
+      "family": "SALSA",
+      "hashtag": "#rumba",
+      "top_level": true,
+      "sub_tags": [
+        "salsa",
+        "perreo",
+        "urbano",
+        "cumbia",
+        "social-dance",
+        "vallenato-bailable",
+        "champeta",
+        "salsa-choke",
+        "viejoteca",
+        "electronica-baile"
+      ],
+      "accepts_actions": [
+        "bailar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "NOCHE",
+      "color_hex": "#3A1F4D",
+      "family": "INK",
+      "hashtag": "#noche",
+      "top_level": true,
+      "sub_tags": [
+        "listening-bar",
+        "after",
+        "queer-party",
+        "karaoke",
+        "dj-set-vinilo",
+        "electronica-club",
+        "coctel-bar",
+        "lounge"
+      ],
+      "accepts_actions": [
+        "conversar",
+        "escuchar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "SHOW",
+      "color_hex": "#A12F86",
+      "family": "UNKNOWN",
+      "hashtag": "#show",
+      "top_level": true,
+      "sub_tags": [
+        "concierto",
+        "sinfonico",
+        "clasica",
+        "festival-musical",
+        "concierto-indie",
+        "cantautor-trovador",
+        "live-jazz",
+        "vallenato-pop",
+        "tributo-bandas",
+        "gala",
+        "recital",
+        "stand-up",
+        "drag-cabaret",
+        "pasarela-moda"
+      ],
+      "accepts_actions": [
+        "presenciar",
+        "escuchar",
+        "cantar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "COMIDA",
+      "color_hex": "#D87A2C",
+      "family": "CALI",
+      "hashtag": "#comida",
+      "top_level": true,
+      "sub_tags": [
+        "brunch",
+        "gastro-autor",
+        "street",
+        "vegano",
+        "cafeteria-especialidad",
+        "cata",
+        "popular-callejera",
+        "mercado-gastronomico",
+        "sancocho-tradicional"
+      ],
+      "accepts_actions": [
+        "comer"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "AIRE",
+      "color_hex": "#4B8FBF",
+      "family": "PACIFIC",
+      "hashtag": "#aire",
+      "top_level": true,
+      "sub_tags": [
+        "hike",
+        "running",
+        "ciclismo",
+        "escalada-roca",
+        "skate",
+        "playa-rio",
+        "pance-pichinde"
+      ],
+      "accepts_actions": [
+        "jugar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "DEPORTE",
+      "color_hex": "#9E3322",
+      "family": "SALSA",
+      "hashtag": "#deporte",
+      "top_level": true,
+      "sub_tags": [
+        "gym",
+        "crossfit",
+        "boxeo",
+        "artes-marciales",
+        "spinning-studio",
+        "basket-volei-indoor",
+        "atletismo-pista",
+        "deporte-pro-indoor",
+        "escalada-muro",
+        "deporte-callejero",
+        "deporte-espectador",
+        "esports",
+        "lan-gaming"
+      ],
+      "accepts_actions": [
+        "jugar",
+        "presenciar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "SABER",
+      "color_hex": "#5C3B22",
+      "family": "INK",
+      "hashtag": "#saber",
+      "top_level": true,
+      "sub_tags": [
+        "workshop",
+        "charla",
+        "conferencia",
+        "curso",
+        "formacion-tecnica",
+        "tertulia",
+        "masterclass",
+        "podcast-en-vivo",
+        "club-debate"
+      ],
+      "accepts_actions": [
+        "aprender",
+        "conversar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "EMPRENDIMIENTO",
+      "color_hex": "#7A3D5E",
+      "family": "MAGENTA",
+      "hashtag": "#emprendimiento",
+      "top_level": true,
+      "sub_tags": [
+        "demo-day",
+        "networking",
+        "pitch",
+        "meetup-founders",
+        "hackathon",
+        "feria-emprendedora",
+        "lanzamiento-producto"
+      ],
+      "accepts_actions": [
+        "conectar",
+        "conversar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "COMUNIDAD",
+      "color_hex": "#5E8B6A",
+      "family": "PACIFIC",
+      "hashtag": "#comunidad",
+      "top_level": true,
+      "sub_tags": [
+        "mercado-barrial",
+        "club-lectura",
+        "voluntariado",
+        "activismo",
+        "animalismo",
+        "jornada-barrio",
+        "colectivo-cultural",
+        "asamblea-comunal",
+        "brigada-comunal",
+        "foro-civico",
+        "debate-electoral",
+        "marcha-ciudadana"
+      ],
+      "accepts_actions": [
+        "conectar",
+        "conversar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "ESPIRITUAL",
+      "color_hex": "#A088CC",
+      "family": "MAGENTA",
+      "hashtag": "#espiritual",
+      "top_level": true,
+      "sub_tags": [
+        "encuentro",
+        "meditacion",
+        "retiro",
+        "fe",
+        "sanacion",
+        "peregrinacion",
+        "ceremonia"
+      ],
+      "accepts_actions": [
+        "sentir",
+        "cantar"
+      ],
+      "fg_token": "tinta"
+    },
+    {
+      "name": "WELLNESS",
+      "color_hex": "#5DC4A8",
+      "family": "PACIFIC",
+      "hashtag": "#wellness",
+      "top_level": true,
+      "sub_tags": [
+        "yoga",
+        "sound-bath",
+        "breathwork",
+        "masaje",
+        "holistic",
+        "pilates",
+        "danza-terapia",
+        "mindfulness",
+        "terapia-fria",
+        "float-tank"
+      ],
+      "accepts_actions": [
+        "sentir"
+      ],
+      "fg_token": "tinta"
+    },
+    {
+      "name": "EXPO",
+      "color_hex": "#B07A24",
+      "family": "CALI",
+      "hashtag": "#expo",
+      "top_level": true,
+      "sub_tags": [
+        "feria-comercial",
+        "expo-hogar",
+        "expo-tech",
+        "salon-inmobiliario",
+        "feria-mueble",
+        "expo-motor"
+      ],
+      "accepts_actions": [
+        "observar"
+      ],
+      "fg_token": "crema"
+    },
+    {
+      "name": "EXPLORAR",
+      "color_hex": "#1F8E96",
+      "family": "PACIFIC",
+      "hashtag": "#explorar",
+      "top_level": true,
+      "sub_tags": [
+        "city-tour",
+        "recorrido-patrimonial",
+        "tour-gastronomico",
+        "ruta-historica",
+        "mirador",
+        "free-tour"
+      ],
+      "accepts_actions": [
+        "observar",
+        "jugar"
+      ],
+      "fg_token": "crema"
+    }
+  ],
+  "ocasiones_canonicas": {
+    "live_shows": {
+      "label": "Ver en vivo",
+      "color_dominante_hex": "#A12F86",
+      "order": 1,
+      "kind": "occasion",
+      "labels": {
+        "co": "Ver en vivo"
+      }
+    },
+    "with_friends": {
+      "label": "Con el parche",
+      "color_dominante_hex": "#4B8FBF",
+      "order": 2,
+      "kind": "occasion",
+      "labels": {
+        "co": "Con el parche"
+      }
+    },
+    "with_family": {
+      "label": "Plan en familia",
+      "color_dominante_hex": "#E8C233",
+      "order": 3,
+      "kind": "occasion",
+      "labels": {
+        "co": "Plan en familia"
+      }
+    },
+    "with_partner": {
+      "label": "Con la pareja",
+      "color_dominante_hex": "#E5A0A8",
+      "order": 4,
+      "kind": "occasion",
+      "labels": {
+        "co": "Con la pareja"
+      }
+    },
+    "explore_city": {
+      "label": "Descubrir la ciudad",
+      "color_dominante_hex": "#1F8E96",
+      "order": 5,
+      "kind": "occasion",
+      "labels": {
+        "co": "Descubrir la ciudad"
+      }
+    },
+    "learn_create": {
+      "label": "Aprender y crear",
+      "color_dominante_hex": "#C13D60",
+      "order": 6,
+      "kind": "occasion",
+      "labels": {
+        "co": "Aprender y crear"
+      }
+    },
+    "recharge": {
+      "label": "Recargar",
+      "color_dominante_hex": "#5DC4A8",
+      "order": 7,
+      "kind": "occasion",
+      "labels": {
+        "co": "Recargar"
+      }
+    },
+    "meet_people": {
+      "label": "Conocer gente",
+      "color_dominante_hex": "#7A3D5E",
+      "order": 8,
+      "kind": "occasion",
+      "labels": {
+        "co": "Conocer gente"
+      }
+    }
+  },
+  "lenses": {
+    "when": {
+      "kind": "lens",
+      "values": [
+        "now",
+        "today",
+        "weekend",
+        "this_week"
+      ],
+      "labels": {
+        "co": "Cuándo"
+      },
+      "value_labels": {
+        "co": {
+          "now": "Ahora/Esta noche",
+          "today": "Hoy",
+          "weekend": "Este finde",
+          "this_week": "Esta semana"
+        }
+      }
+    },
+    "where": {
+      "kind": "lens",
+      "values": [
+        "near_me",
+        "by_zone"
+      ],
+      "labels": {
+        "co": "Dónde"
+      },
+      "value_labels": {
+        "co": {
+          "near_me": "Cerca de mí",
+          "by_zone": "Por zona"
+        }
+      }
+    },
+    "budget": {
+      "kind": "lens",
+      "values": [
+        "free",
+        "low_cost",
+        "premium"
+      ],
+      "labels": {
+        "co": "Cuánto"
+      },
+      "value_labels": {
+        "co": {
+          "free": "Gratis",
+          "low_cost": "Económico",
+          "premium": "Premium"
+        }
+      }
+    }
+  },
+  "default_locale": "co",
+  "transversal_tags": {
+    "audiencia_accesibilidad": [
+      "pet-friendly",
+      "baby-friendly",
+      "lgbtiq+-safe",
+      "accesible-fisicamente",
+      "solo-adultos",
+      "multigeneracional"
+    ],
+    "economicos": [
+      "gratis",
+      "low-cost",
+      "premium"
+    ],
+    "sociales": [
+      "sin-alcohol",
+      "espiritual",
+      "causa",
+      "sin-fines-de-lucro",
+      "comercial",
+      "civico",
+      "moda"
+    ],
+    "fisicos": [
+      "indoor",
+      "outdoor",
+      "en-grupo",
+      "individual"
+    ],
+    "momento": [
+      "manana",
+      "tarde",
+      "noche",
+      "madrugada"
+    ],
+    "modalidad": [
+      "en-vivo",
+      "grabado"
+    ],
+    "nivel": [
+      "principiantes",
+      "intermedio",
+      "avanzado"
+    ],
+    "operativos": [
+      "solo-mayores-edad",
+      "kid-friendly-no-infantil",
+      "ticket-required",
+      "walk-in"
+    ]
+  },
+  "mood_facets": [
+    {
+      "id": "chill",
+      "definition": "baja energía · relax · estado relajado",
+      "ejemplos": [
+        "yoga AM",
+        "brunch tranquilo",
+        "café especialidad"
+      ]
+    },
+    {
+      "id": "festivo",
+      "definition": "alta energía celebración · social extrovertido",
+      "ejemplos": [
+        "rumba salsoteca",
+        "cumpleaños masivo",
+        "bicicleteada nocturna"
+      ]
+    },
+    {
+      "id": "íntimo",
+      "definition": "espacio pequeño · interpersonal cercano",
+      "ejemplos": [
+        "concierto acústico bar pequeño",
+        "cena pareja",
+        "taller cerrado"
+      ]
+    },
+    {
+      "id": "tranquilo",
+      "definition": "interior pensativo · pausado · cubre reflexivo + meditativo",
+      "ejemplos": [
+        "cine de autor",
+        "club lectura",
+        "sound bath"
+      ]
+    },
+    {
+      "id": "creativo",
+      "definition": "expresivo · making · taller",
+      "ejemplos": [
+        "taller cerámica",
+        "zine",
+        "mercado diseño"
+      ]
+    },
+    {
+      "id": "nostálgico",
+      "definition": "emocional pasado · memoria",
+      "ejemplos": [
+        "tributos",
+        "planchenato",
+        "folclore vivo"
+      ]
+    },
+    {
+      "id": "adrenalina",
+      "definition": "alta energía física · riesgo · sport",
+      "ejemplos": [
+        "escalada",
+        "trail run",
+        "motocross"
+      ]
+    },
+    {
+      "id": "intenso",
+      "definition": "alta carga emocional · concierto que rompe",
+      "ejemplos": [
+        "concierto íntimo cantautor",
+        "obra teatral fuerte",
+        "marcha emotiva"
+      ]
+    },
+    {
+      "id": "sobrio",
+      "definition": "sin alcohol · contained · sober-curious",
+      "ejemplos": [
+        "retreat",
+        "yoga",
+        "café cultural",
+        "misa"
+      ]
+    },
+    {
+      "id": "cálido",
+      "definition": "warm afecto · acogedor · puede ser grupal",
+      "ejemplos": [
+        "sancocho dominical",
+        "brunch amigos",
+        "jornada barrio"
+      ]
+    },
+    {
+      "id": "lúdico",
+      "definition": "juego · playful · cooperativo no-competitivo",
+      "ejemplos": [
+        "escape room",
+        "juego de mesa",
+        "taller infantil cooperativo"
+      ]
+    }
+  ],
+  "vibe_to_cluster_hints": {
+    "$gap": "Pending canonical definition. Editor MUST treat as empty until populated."
+  }
+}

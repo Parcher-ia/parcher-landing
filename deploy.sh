@@ -20,6 +20,13 @@ PROFILE="${PARCHER_AWS_PROFILE:-parcher}"
 
 cd "$(dirname "$0")"
 
+# Pre-step obligatorio: refrescar snapshot del catálogo desde catalog.parcher.co.
+# Si el CDN está caído, fetch-catalog.sh falla con exit 1 y aborta el deploy.
+# El landing queda pinned a la versión versionada en assets/catalog/ que
+# acabamos de chequear, así que es safe pinear si quisiéramos forzar (no se hace).
+echo "→ refrescando snapshot del catálogo desde el CDN"
+bash scripts/fetch-catalog.sh
+
 echo "→ sync a s3://$BUCKET/ (profile=$PROFILE)"
 # ────────────────────────────────────────────────────────────────────────────
 # ⚠️  BLINDAJE PRERENDER — NO QUITAR LOS --exclude DE "e/*" Y "api/*"
@@ -38,6 +45,7 @@ aws --profile "$PROFILE" s3 sync . "s3://$BUCKET/" \
   --exclude "cloudfront-rewrite.js" \
   --exclude ".gitignore" \
   --exclude ".DS_Store" \
+  --exclude "scripts/*" \
   --exclude "e/*" \
   --exclude "api/*"
 
