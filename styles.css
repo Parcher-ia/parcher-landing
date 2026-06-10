@@ -1,9 +1,13 @@
 /* parcher landing · styles.css
    Design tokens: SSOT = marca_parcher/tokens.json v4.3 · catalog v2.0.0
    Foundationals + clusters + ocasiones: definidos en assets/catalog/catalog.css
-   (vendoreado desde marca_parcher/dist/catalog.css por scripts/fetch-catalog.sh).
-   Cuando workspace suba catalog.css al CDN, cambiar el @import por:
-     @import url('https://catalog.parcher.co/v1/catalog.css');
+   (vendoreado al build-time desde https://catalog.parcher.co/v1/catalog.css
+   por scripts/fetch-catalog.sh · fallback a marca_parcher/dist/catalog.css).
+   El @import es local a propósito · same-origin = primera-pintura rápida y
+   cero dependencia runtime con un tercer host. La SSOT vive en el CDN; el
+   landing solo mantiene un mirror versionado en git que se refresca en cada
+   deploy. Si necesitás forzar la última versión del CDN, corré:
+     bash scripts/fetch-catalog.sh && bash deploy.sh
    Cualquier cambio visual se valida contra /opt/parcher/marca_parcher/parcher-brand-book.md */
 @import url('./assets/catalog/catalog.css');
 
