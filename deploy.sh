@@ -47,7 +47,13 @@ aws --profile "$PROFILE" s3 sync . "s3://$BUCKET/" \
   --exclude "*.DS_Store" \
   --exclude "scripts/*" \
   --exclude "e/*" \
-  --exclude "api/*"
+  --exclude "api/*" \
+  --cache-control "public, max-age=60"
+# max-age=60 deja que el browser revalide cada minuto vía etag (cheap 304s).
+# Sin esto, los navegadores cachean event.js/styles.css por horas con su
+# heurística propia, y la invalidación de CloudFront no los limpia. Ya nos
+# pasó: deploy nuevo + invalidation completed pero "lo veo igual" porque
+# el JS viejo seguía vivo en el browser.
 
 echo "→ invalidando CloudFront ($DISTRIBUTION_ID)"
 INV_ID=$(aws --profile "$PROFILE" cloudfront create-invalidation \
