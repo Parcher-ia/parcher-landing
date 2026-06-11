@@ -22,6 +22,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="/styles.css" />
+
+  <!-- GA4 plumbing -->
+  <script>window.PARCHER_GA4_ID = 'G-7VSJY74C7S';</script>
+  <script src="/analytics.js" async></script>
 </head>
 <body class="event-page">
 
@@ -42,11 +46,13 @@
           mientras tanto, te paso lo que hay hoy.
         </p>
         <div class="ev-error-actions">
-          <a class="cta-primary" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">
+          <a class="cta-primary" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener"
+             data-track="click_dm_cta" data-track-surface="404">
             <span>escribime por DM</span>
             <span class="arrow">→</span>
           </a>
-          <a class="ev-action" href="/">
+          <a class="ev-action" href="/"
+             data-track="click_back_home" data-track-surface="404">
             <span class="ev-action-ico" aria-hidden="true">←</span>
             <span>ir a parcher.co</span>
           </a>

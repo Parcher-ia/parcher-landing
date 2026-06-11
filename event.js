@@ -446,10 +446,15 @@
       '</p>' +
       '<a class="cta-primary" href="' +
       DM_URL +
-      '" target="_blank" rel="noopener">' +
+      '" target="_blank" rel="noopener"' +
+      ' data-track="click_dm_cta"' +
+      ' data-track-surface="event_detail_error_' + kind + '">' +
       '<span>escribime por DM</span><span class="arrow">→</span></a>' +
       '<div class="cta-secondary">@soyparcher</div>' +
       '</div></section>';
+    if (typeof window.parcherTrack === 'function') {
+      window.parcherTrack('event_detail_error', { kind: kind });
+    }
   }
 
   function renderEvent(data) {
@@ -514,7 +519,10 @@
       sourceMiniHtml =
         '<a class="ev-source-mini" href="' +
         escapeHtml(primarySource.source_url) +
-        '" target="_blank" rel="noopener">' +
+        '" target="_blank" rel="noopener"' +
+        ' data-track="click_source_post"' +
+        ' data-track-event-id="' + escapeHtml(data.id || '') + '"' +
+        ' data-track-handle="' + escapeHtml(primarySource.instagram_handle || '') + '">' +
         escapeHtml(sourceMiniLabel) +
         ' <span aria-hidden="true">↗</span></a>';
     }
@@ -528,7 +536,9 @@
           escapeHtml(mapsUrl) +
           '" target="_blank" rel="noopener" aria-label="ver ' +
           escapeHtml(venueName) +
-          ' en Google Maps">' +
+          ' en Google Maps" data-track="click_venue_maps" data-track-event-id="' +
+          escapeHtml(data.id || '') +
+          '" data-track-venue="' + escapeHtml(venueName) + '">' +
           escapeHtml(venueName) +
           ' <span class="ev-chip-arrow" aria-hidden="true">↗</span></a>';
       } else {
@@ -611,7 +621,10 @@
       heroCtas.push(
         '<a class="cta-primary" href="' +
           escapeHtml(ticketing.ticketing_url) +
-          '" target="_blank" rel="noopener">' +
+          '" target="_blank" rel="noopener"' +
+          ' data-track="click_get_tickets"' +
+          ' data-track-event-id="' + escapeHtml(data.id || '') + '"' +
+          ' data-track-provider="' + escapeHtml(ticketing.ticketing_provider || '') + '">' +
           '<span>conseguir entradas</span><span class="arrow">→</span></a>' +
           (availHtmlHero ? availHtmlHero : '')
       );
@@ -621,7 +634,9 @@
       heroCtas.push(
         '<a class="ev-action" href="' +
           escapeHtml(calHrefHero) +
-          '" target="_blank" rel="noopener" aria-label="agregar al calendario">' +
+          '" target="_blank" rel="noopener" aria-label="agregar al calendario"' +
+          ' data-track="click_calendar"' +
+          ' data-track-event-id="' + escapeHtml(data.id || '') + '">' +
           CAL_ICON +
           '<span>agregar al calendario</span></a>'
       );
@@ -629,7 +644,9 @@
     heroCtas.push(
       '<a class="ev-action ev-action-whatsapp" href="' +
         escapeHtml(whatsappShareHref(data)) +
-        '" target="_blank" rel="noopener" aria-label="compartir por WhatsApp">' +
+        '" target="_blank" rel="noopener" aria-label="compartir por WhatsApp"' +
+        ' data-track="click_whatsapp_share"' +
+        ' data-track-event-id="' + escapeHtml(data.id || '') + '">' +
         WA_ICON +
         '<span>compartir</span></a>'
     );
@@ -852,7 +869,9 @@
           escapeHtml(waDigits) +
           '" target="_blank" rel="noopener" aria-label="abrir WhatsApp con ' +
           escapeHtml(ticketing.whatsapp) +
-          '">' + WA_ICON +
+          '" data-track="click_whatsapp_contact"' +
+          ' data-track-event-id="' + escapeHtml(data.id || '') + '">' +
+          WA_ICON +
           '<span>WhatsApp · ' + escapeHtml(ticketing.whatsapp) + '</span></a>'
         );
       }
@@ -862,7 +881,9 @@
           escapeHtml(phoneDigits) +
           '" target="_blank" rel="noopener" aria-label="abrir WhatsApp con ' +
           escapeHtml(ticketing.phone) +
-          '">' + WA_ICON +
+          '" data-track="click_whatsapp_contact"' +
+          ' data-track-event-id="' + escapeHtml(data.id || '') + '">' +
+          WA_ICON +
           '<span>WhatsApp · ' + escapeHtml(ticketing.phone) + '</span></a>'
         );
       }
@@ -889,7 +910,10 @@
       '<p class="ev-cta-eyebrow">hay más parches por descubrir</p>' +
       '<a class="cta-primary" href="' +
       DM_URL +
-      '" target="_blank" rel="noopener">' +
+      '" target="_blank" rel="noopener"' +
+      ' data-track="click_dm_cta"' +
+      ' data-track-surface="event_detail_cta_final"' +
+      ' data-track-event-id="' + escapeHtml(data.id || '') + '">' +
       '<span>escribime por DM</span><span class="arrow">→</span></a>' +
       '<div class="cta-secondary">@soyparcher</div>' +
       '</div></section>';
@@ -901,6 +925,19 @@
 
     if (data.title) {
       document.title = data.title + ' · parcher';
+    }
+
+    // GA4 · vista del detail con dimensiones útiles pa' cohortes.
+    // window.parcherTrack es no-op si analytics.js no cargó (offline / blocker).
+    if (typeof window.parcherTrack === 'function') {
+      window.parcherTrack('view_event_detail', {
+        event_id: data.id,
+        city: data.city || (data.venue_profile && data.venue_profile.city) || '',
+        activity_type: data.activity_type || '',
+        has_lineup: heroArtists.length > 0 ? 'true' : 'false',
+        has_tickets: ticketing.ticketing_url ? 'true' : 'false',
+        is_paid: ticketing.ticketing_type === 'paid' ? 'true' : 'false',
+      });
     }
   }
 

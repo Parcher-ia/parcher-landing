@@ -23,6 +23,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- GA4 plumbing · ID en window var pa' centralizar en un punto.
+       analytics.js carga gtag async y expone window.parcherTrack(). -->
+  <script>window.PARCHER_GA4_ID = 'G-7VSJY74C7S';</script>
+  <script src="/analytics.js" async></script>
 </head>
 <body>
 
@@ -38,7 +43,8 @@
         tu ciudad tiene plan. Vení, <span class="accent">parchate</span>.
       </p>
 
-      <a class="cta-primary" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">
+      <a class="cta-primary" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener"
+         data-track="click_dm_cta" data-track-surface="home_hero">
         <span>escribime por DM</span>
         <span class="arrow">→</span>
       </a>
@@ -54,14 +60,14 @@
 
       <!-- fg por regla §5.5 (tokens.json): sol·rosa·jade piden tinta; el resto crema. -->
       <ul class="ocasiones-grid" aria-label="ocasiones canónicas">
-        <li><a class="ocasion-chip" style="--c: var(--ocasion-live-shows);   --ct: var(--crema);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">Ver en vivo</a></li>
-        <li><a class="ocasion-chip" style="--c: var(--ocasion-with-friends); --ct: var(--crema);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">Con el parche</a></li>
-        <li><a class="ocasion-chip" style="--c: var(--ocasion-with-family);  --ct: var(--tinta);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">Plan en familia</a></li>
-        <li><a class="ocasion-chip" style="--c: var(--ocasion-with-partner); --ct: var(--tinta);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">Con la pareja</a></li>
-        <li><a class="ocasion-chip" style="--c: var(--ocasion-explore-city); --ct: var(--crema);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">Descubrir la ciudad</a></li>
-        <li><a class="ocasion-chip" style="--c: var(--ocasion-learn-create); --ct: var(--crema);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">Aprender y crear</a></li>
-        <li><a class="ocasion-chip" style="--c: var(--ocasion-recharge);     --ct: var(--tinta);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">Recargar</a></li>
-        <li><a class="ocasion-chip" style="--c: var(--ocasion-meet-people);  --ct: var(--crema);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">Conocer gente</a></li>
+        <li><a class="ocasion-chip" style="--c: var(--ocasion-live-shows);   --ct: var(--crema);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener" data-track="click_ocasion_chip" data-track-ocasion-key="live_shows">Ver en vivo</a></li>
+        <li><a class="ocasion-chip" style="--c: var(--ocasion-with-friends); --ct: var(--crema);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener" data-track="click_ocasion_chip" data-track-ocasion-key="with_friends">Con el parche</a></li>
+        <li><a class="ocasion-chip" style="--c: var(--ocasion-with-family);  --ct: var(--tinta);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener" data-track="click_ocasion_chip" data-track-ocasion-key="with_family">Plan en familia</a></li>
+        <li><a class="ocasion-chip" style="--c: var(--ocasion-with-partner); --ct: var(--tinta);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener" data-track="click_ocasion_chip" data-track-ocasion-key="with_partner">Con la pareja</a></li>
+        <li><a class="ocasion-chip" style="--c: var(--ocasion-explore-city); --ct: var(--crema);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener" data-track="click_ocasion_chip" data-track-ocasion-key="explore_city">Descubrir la ciudad</a></li>
+        <li><a class="ocasion-chip" style="--c: var(--ocasion-learn-create); --ct: var(--crema);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener" data-track="click_ocasion_chip" data-track-ocasion-key="learn_create">Aprender y crear</a></li>
+        <li><a class="ocasion-chip" style="--c: var(--ocasion-recharge);     --ct: var(--tinta);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener" data-track="click_ocasion_chip" data-track-ocasion-key="recharge">Recargar</a></li>
+        <li><a class="ocasion-chip" style="--c: var(--ocasion-meet-people);  --ct: var(--crema);" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener" data-track="click_ocasion_chip" data-track-ocasion-key="meet_people">Conocer gente</a></li>
       </ul>
     </div>
   </section>
@@ -102,7 +108,8 @@
       <p class="eyebrow">así es la conversación</p>
       <h2>preguntame, <span class="accent">te respondo</span>.</h2>
 
-      <a class="dm-link" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener" aria-label="abrir conversación con @soyparcher en Instagram">
+      <a class="dm-link" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener" aria-label="abrir conversación con @soyparcher en Instagram"
+         data-track="click_dm_cta" data-track-surface="home_sample_dm">
         <div class="dm-wrap" id="dm">
           <div class="dm-header">
             <div class="dm-header-avatar">
@@ -235,7 +242,8 @@
     <div class="container">
       <h2>¿qué parche hay <span class="accent">pa' hoy</span>?</h2>
 
-      <a class="cta-primary" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener">
+      <a class="cta-primary" href="https://ig.me/m/soyparcher" target="_blank" rel="noopener"
+         data-track="click_dm_cta" data-track-surface="home_cta_final">
         <span>vení, parchate</span>
         <span class="arrow">→</span>
       </a>
