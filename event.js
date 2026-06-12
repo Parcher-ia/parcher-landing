@@ -70,6 +70,9 @@
     var h = get('hour');
     var min = get('minute');
     var period = (get('dayPeriod') || '').toLowerCase();
+    // Hora fantasma: 12:00am es default cuando el backend no tiene hora real.
+    // Si no hay señal de confianza · ocultamos la hora pa' no mostrar mentira.
+    if (min === '00' && h === '12' && period === 'am') return dateStr;
     var time = min === '00' ? h + period : h + ':' + min + period;
     return dateStr + ' ' + time;
   }
@@ -347,32 +350,43 @@
     return { first: m[1], rest: m[3] };
   }
 
-  // Mapping de ocasiones (Set F · ADR 013) · key → label + color token + fg.
-  // Coincide con catalog.json $.ocasiones_canonicas y los aliases
-  // --ocasion-* del catalog.css. fg sigue regla §5.5 (sol/rosa/jade → tinta).
+  // Mapping de ocasiones (Set F · ADR 013) · key → label + color token + fg + slug.
+  // SSOT: catalog.json $.ocasiones_canonicas + catalog.css aliases --ocasion-*.
+  // El slug es para el href hacia category pages (`/cali/<slug>`) · keys ADR 011/012.
   var OCASION_MAP = {
-    live_shows:   { label: 'Ver en vivo',         token: 'live-shows',   fg: 'crema' },
-    with_friends: { label: 'Con el parche',       token: 'with-friends', fg: 'crema' },
-    with_family:  { label: 'Plan en familia',     token: 'with-family',  fg: 'tinta' },
-    with_partner: { label: 'Con la pareja',       token: 'with-partner', fg: 'tinta' },
-    explore_city: { label: 'Descubrir la ciudad', token: 'explore-city', fg: 'crema' },
-    learn_create: { label: 'Aprender y crear',    token: 'learn-create', fg: 'crema' },
-    recharge:     { label: 'Recargar',            token: 'recharge',     fg: 'tinta' },
-    meet_people:  { label: 'Conocer gente',       token: 'meet-people',  fg: 'crema' },
+    live_shows:   { label: 'Ver en vivo',         token: 'live-shows',   fg: 'crema', slug: 'ver-en-vivo' },
+    with_friends: { label: 'Con el parche',       token: 'with-friends', fg: 'tinta', slug: 'con-el-parche' },
+    with_family:  { label: 'Plan en familia',     token: 'with-family',  fg: 'tinta', slug: 'plan-en-familia' },
+    with_partner: { label: 'Con la pareja',       token: 'with-partner', fg: 'tinta', slug: 'con-la-pareja' },
+    explore_city: { label: 'Descubrir la ciudad', token: 'explore-city', fg: 'crema', slug: 'descubrir-la-ciudad' },
+    learn_create: { label: 'Aprender y crear',    token: 'learn-create', fg: 'crema', slug: 'aprender-y-crear' },
+    recharge:     { label: 'Recargar',            token: 'recharge',     fg: 'tinta', slug: 'recargar' },
+    meet_people:  { label: 'Conocer gente',       token: 'meet-people',  fg: 'crema', slug: 'conocer-gente' },
   };
+
+  // Cities con category pages generadas · MVP: Cali only.
+  // Si crece, exponer flag desde backend o derivar del payload.
+  var CATEGORY_CITIES = { cali: 'cali' }; // city lowercased → city slug
 
   function buildOccasionChips(data) {
     var arr = Array.isArray(data.occasions) ? data.occasions : [];
     if (!arr.length) return '';
+    var city = String((data && data.city) || (data && data.venue_profile && data.venue_profile.city) || '').toLowerCase();
+    var citySlug = CATEGORY_CITIES[city] || '';
     var chips = arr.map(function (key) {
-      var info = OCASION_MAP[String(key).toLowerCase()];
+      var k = String(key).toLowerCase();
+      var info = OCASION_MAP[k];
       if (!info) return '';
-      return (
-        '<span class="ev-occasion-chip" style="--c: var(--ocasion-' + info.token +
-        '); --ct: var(--' + info.fg + ');">' +
-        escapeHtml(info.label) +
-        '</span>'
-      );
+      var style = '--c: var(--ocasion-' + info.token + '); --ct: var(--' + info.fg + ');';
+      // Si hay city con categorías → link a /cali/<slug>; sino span fallback.
+      if (citySlug) {
+        return (
+          '<a class="ev-occasion-chip ev-occasion-chip-link" href="/' + citySlug + '/' + info.slug +
+          '" style="' + style + '" data-track="click_occasion_chip" data-track-ocasion-key="' + escapeHtml(k) + '">' +
+          escapeHtml(info.label) + '</a>'
+        );
+      }
+      return '<span class="ev-occasion-chip" style="' + style + '">' + escapeHtml(info.label) + '</span>';
     }).filter(function (s) { return s; }).join('');
     if (!chips) return '';
     return '<div class="ev-occasions" aria-label="ocasiones del evento">' + chips + '</div>';
@@ -974,10 +988,12 @@
       '<div class="cta-secondary">@soyparcher</div>' +
       '</div></section>';
 
-    // Orden: Hero (todo) → Dónde (justo después del actions row) → Detalles
-    // → Tags (etiquetas footprint) → CTA final.
+    // Orden: Hero (todo) → Dónde → Detalles → Tags (etiquetas footprint).
+    // CTA final NO se renderea acá · vive estático en el prerender HTML
+    // entre <aside class="ev-related-categories"> y <footer>, para que
+    // related cards aparezcan ANTES del CTA DM (review Iris 2026-06-12).
     root.innerHTML =
-      heroHtml + dondeHtml + detailsHtml + tagsHtml + ctaFinalHtml;
+      heroHtml + dondeHtml + detailsHtml + tagsHtml;
 
     if (data.title) {
       document.title = data.title + ' · parcher';
