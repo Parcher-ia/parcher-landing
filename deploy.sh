@@ -27,6 +27,16 @@ cd "$(dirname "$0")"
 echo "→ refrescando snapshot del catálogo desde el CDN"
 bash scripts/fetch-catalog.sh
 
+# Minificar styles.css antes del sync (saves ~16KB · ~300ms LCP en mobile).
+# El minified queda en /tmp y se sube con aws cp; el repo conserva el source
+# legible. Si csso falla, fallback al CSS sin minificar (no bloquea deploy).
+MIN_CSS="/tmp/parcher-styles.min.css"
+echo "→ minificando styles.css"
+if npx --yes csso-cli styles.css --output "$MIN_CSS" 2>&1 | grep -qE 'error|fail'; then
+  echo "⚠ csso falló · subiendo styles.css sin minificar"
+  cp styles.css "$MIN_CSS"
+fi
+
 echo "→ sync a s3://$BUCKET/ (profile=$PROFILE)"
 # ────────────────────────────────────────────────────────────────────────────
 # ⚠️  BLINDAJE PRERENDER — NO QUITAR LOS --exclude DE "e/*" Y "api/*"
@@ -46,9 +56,20 @@ aws --profile "$PROFILE" s3 sync . "s3://$BUCKET/" \
   --exclude ".gitignore" \
   --exclude "*.DS_Store" \
   --exclude "scripts/*" \
+  --exclude "styles.css" \
   --exclude "e/*" \
   --exclude "api/*" \
+  --exclude "buy/*" \
+  --exclude "cali/*" \
+  --exclude "cali.html" \
+  --exclude "sitemap.xml" \
   --cache-control "public, max-age=60"
+
+# styles.css minificado se sube por separado (con Content-Type explícito).
+aws --profile "$PROFILE" s3 cp "$MIN_CSS" "s3://$BUCKET/styles.css" \
+  --content-type "text/css; charset=utf-8" \
+  --cache-control "public, max-age=60" \
+  --no-progress
 # max-age=60 deja que el browser revalide cada minuto vía etag (cheap 304s).
 # Sin esto, los navegadores cachean event.js/styles.css por horas con su
 # heurística propia, y la invalidación de CloudFront no los limpia. Ya nos
