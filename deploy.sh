@@ -40,6 +40,10 @@ fi
 echo "→ sync a s3://$BUCKET/ (profile=$PROFILE)"
 # ────────────────────────────────────────────────────────────────────────────
 # ⚠️  BLINDAJE PRERENDER — NO QUITAR LOS --exclude DE "e/*" Y "api/*"
+# ⚠️  BLINDAJE APP — NO QUITAR los --exclude de "_app/*", "app-index.html",
+# manifest/íconos: son la app del feed (repo parcher-app · deploy propio) que
+# vive en ESTE bucket desde la promoción a parcher.co (2026-06-12). Un sync
+# --delete sin esos excludes la borra (pasó el 2026-06-12 · no repetir).
 # El backend escribe HTMLs prerenderizados por evento en /e/<uuid>.html y
 # payloads JSON en /api/v1/events/<uuid>.json sobre ESTE MISMO BUCKET.
 # Como abajo usamos --delete, un sync sin estos excludes BORRARÍA los 15k+
@@ -63,6 +67,12 @@ aws --profile "$PROFILE" s3 sync . "s3://$BUCKET/" \
   --exclude "cali/*" \
   --exclude "cali.html" \
   --exclude "sitemap.xml" \
+  --exclude "_app/*" \
+  --exclude "app-index.html" \
+  --exclude "manifest.webmanifest" \
+  --exclude "icon-*.png" \
+  --exclude "icon.svg" \
+  --exclude "apple-touch-icon.png" \
   --cache-control "public, max-age=60"
 
 # styles.css minificado se sube por separado (con Content-Type explícito).
