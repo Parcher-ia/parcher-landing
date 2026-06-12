@@ -705,8 +705,14 @@ footer a:hover { color: var(--color-ink); }
   margin: 0 0 var(--space-6);
 }
 @media (min-width: 600px) {
-  .ev-lentes { grid-template-columns: repeat(3, 1fr); }
+  /* "Cuándo" trae más caracteres ("vie 26/6 8pm" ~12 chars) que "Dónde"
+     ("Sur de Cali") o "Cuánto" ("Económico · $"). Le damos 1.5fr al primer
+     chip pa' que el date quepa en 1 renglón sin necesitar font shrink. */
+  .ev-lentes { grid-template-columns: 1.5fr 1fr 1fr; }
 }
+/* white-space:nowrap fuerza el value a 1 línea; minmax(0,1fr) deja que el
+   grid honre el ancho del chip sin causar overflow horizontal. */
+.ev-lens-value { white-space: nowrap; }
 .ev-lens-chip {
   display: flex;
   flex-direction: column;
