@@ -1,7 +1,7 @@
 /* parcher-landing-rewrite — CloudFront Function (viewer-request)
  *
- * v5 (device router · promoción de la app · 2026-06-12):
- *   - /e/<uuid>               → /e/<uuid>.html (prerender del backend)
+ * v6 (deep links del feed · 2026-06-12):
+ *   - /e/<uuid>  móvil → /app-index.html (rail) · desktop/bots → prerender
  *   - /p/<shortcode>          → /shortcode.html (resolve client-side)
  *   - /buy/<uuid>             → /buy/<uuid>.html (track + redirect a ticketing)
  *   - /cali · /cali/<slug>    → .html (categorías · feature flag)
@@ -33,10 +33,14 @@
 function handler(event) {
   var uri = event.request.uri;
   var headers = event.request.headers;
+  var ua = headers['user-agent'] ? headers['user-agent'].value.toLowerCase() : '';
+  var isBot = /bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp|telegram|curl|lighthouse/.test(ua);
+  var isMobile = /mobi|android|iphone|ipad|ipod|tablet|silk/.test(ua);
 
-  // /e/<algo> sin extensión → /e/<algo>.html (prerender)
+  // /e/<algo> sin extensión: móvil → rail de la app (v6 · deep links del
+  // bot/captions) · desktop y BOTS → prerender .html (SEO + OG intactos)
   if (uri.length > 3 && uri.substring(0, 3) === '/e/' && uri.indexOf('.') === -1) {
-    event.request.uri = uri + '.html';
+    event.request.uri = isMobile && !isBot ? '/app-index.html' : uri + '.html';
     return event.request;
   }
   // /buy/<algo> sin extensión → /buy/<algo>.html (track + redirect intermediario)
@@ -66,9 +70,6 @@ function handler(event) {
   }
   // Homepage: móvil → app · desktop y bots → landing (SEO)
   if (uri === '/' || uri === '/index.html') {
-    var ua = headers['user-agent'] ? headers['user-agent'].value.toLowerCase() : '';
-    var isBot = /bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp|telegram|curl|lighthouse/.test(ua);
-    var isMobile = /mobi|android|iphone|ipad|ipod|tablet|silk/.test(ua);
     if (isMobile && !isBot) {
       event.request.uri = '/app-index.html';
     }
