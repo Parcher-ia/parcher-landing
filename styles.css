@@ -1365,6 +1365,191 @@ footer a:hover { color: var(--color-ink); }
   100% { background-position: -200% 0; }
 }
 
+/* ========================================================================
+   CATEGORY PAGES (parcher.co/cali, parcher.co/cali/<slug>)
+   Páginas SEO de discovery por ciudad y ocasión · cero JS · brand consistente.
+   ======================================================================== */
+
+.cat-page main { padding-top: var(--space-7); }
+
+/* Hero */
+.cat-hero { padding: var(--space-8) 0 var(--space-7); }
+.cat-hero h1 {
+  font-size: clamp(36px, 6vw, 56px);
+  margin: var(--space-2) 0 var(--space-5);
+}
+.cat-h1-city {
+  font-size: 0.7em;
+  font-weight: 500;
+  display: block;
+  margin-top: 4px;
+  color: var(--color-fg-muted);
+}
+.cat-hero-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(17px, 1.9vw, 20px);
+  line-height: 1.4;
+  color: var(--color-fg-muted);
+  max-width: 600px;
+  margin: 0;
+}
+.cat-eyebrow-link {
+  color: var(--color-fg-muted);
+  border-bottom: 1px dashed var(--color-line);
+}
+.cat-eyebrow-link:hover { color: var(--marca); border-color: var(--marca); }
+
+/* Grid section wrapper */
+.cat-grid-section { padding: var(--space-7) 0; }
+
+/* Occasion cards en /cali (city index) */
+.cat-occasion-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  max-width: 960px;
+}
+@media (min-width: 600px) { .cat-occasion-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .cat-occasion-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.cat-occasion-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  min-height: 140px;
+  background: var(--c, var(--marca));
+  color: var(--crema);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 0 var(--tinta);
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.cat-occasion-card:hover  { transform: translate(0, -3px); box-shadow: 0 7px 0 var(--tinta); }
+.cat-occasion-card:active { transform: translate(0, 1px); box-shadow: 0 2px 0 var(--tinta); }
+.cat-occasion-label {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+.cat-occasion-tagline {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.35;
+  opacity: 0.92;
+}
+.cat-occasion-count {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-pill);
+}
+.cat-occasion-count.cat-occasion-empty { opacity: 0.55; }
+
+/* Event cards en /cali/<slug> */
+.cat-events-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  max-width: 1080px;
+}
+@media (min-width: 540px) { .cat-events-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .cat-events-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.cat-event-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-4);
+  background: var(--color-crema);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  box-shadow: 0 3px 0 var(--tinta);
+  text-decoration: none;
+  color: var(--color-fg);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.cat-event-card:hover  { transform: translate(0, -2px); box-shadow: 0 5px 0 var(--tinta); }
+.cat-event-card:active { transform: translate(0, 1px); box-shadow: 0 2px 0 var(--tinta); }
+.cat-event-cover {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: rgba(15, 23, 48, 0.06);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.cat-event-cover img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  display: block;
+}
+.cat-event-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 var(--space-2);
+}
+.cat-event-title {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 1.7vw, 18px);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+}
+.cat-event-when {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-fg-muted);
+}
+.cat-event-venue {
+  font-size: 13px;
+  color: var(--color-fg-muted);
+}
+
+/* Empty state */
+.cat-empty {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2vw, 21px);
+  line-height: 1.4;
+  color: var(--color-fg-muted);
+  max-width: 560px;
+}
+.cat-empty a {
+  color: var(--marca);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/* CTA bottom · centrado */
+.cat-cta {
+  padding: var(--space-9) 0 var(--space-11);
+  text-align: center;
+  border-top: 1px solid var(--color-line);
+}
+.cat-cta .ev-cta-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+  margin: 0 0 var(--space-5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cat-occasion-card, .cat-event-card { transition: none !important; }
+}
+
 /* ----- error / 404 ----- */
 .ev-error {
   padding: var(--space-14) 0;
