@@ -115,14 +115,39 @@
   function chipsFrom(value, tone) {
     if (!value) return '';
     var arr = Array.isArray(value) ? value : [value];
+    // Dedupe case-insensitive · "teatro" + "Teatro" colapsan a uno solo
+    // (Menor E del handoff Iris · defensive en render mientras se limpia
+    // a nivel ingest).
+    var seen = Object.create(null);
     return arr
       .filter(function (v) {
-        return v !== null && v !== undefined && String(v).trim() !== '';
+        if (v === null || v === undefined) return false;
+        var s = String(v).trim();
+        if (!s) return false;
+        var k = s.toLowerCase();
+        if (seen[k]) return false;
+        seen[k] = true;
+        return true;
       })
       .map(function (v) {
-        return chip(v, tone);
+        return chip(String(v).trim(), tone);
       })
       .join('');
+  }
+
+  // Title-case defensive · venues como "TEATRO SALAMANDRA" → "Teatro Salamandra".
+  // Hallazgo D del handoff Iris · activa solo si el string entero está en MAYÚSCULAS.
+  function titleCaseDefensive(s) {
+    if (!s) return '';
+    var str = String(s).trim();
+    if (!str) return '';
+    if (str !== str.toUpperCase()) return str;
+    var SMALL = { de:1, del:1, y:1, la:1, el:1, las:1, los:1, en:1, al:1, a:1, con:1 };
+    return str.toLowerCase().split(/(\s+)/).map(function (part, i) {
+      if (!/\S/.test(part)) return part;
+      if (i > 0 && SMALL[part]) return part;
+      return part.charAt(0).toUpperCase() + part.slice(1);
+    }).join('');
   }
 
   function mapsHref(vp, fallbackAddress, fallbackName, city) {
@@ -529,8 +554,9 @@
     var cover = pickCoverUrl(data);
     var primarySource = pickPrimarySource(data.event_sources);
     var vp = data.venue_profile || {};
-    var venueName = data.place_name || vp.canonical_name || '';
-    var venueCity = data.city || vp.city || '';
+    // titleCaseDefensive corrige venues como "TEATRO SALAMANDRA" → "Teatro Salamandra".
+    var venueName = titleCaseDefensive(data.place_name || vp.canonical_name || '');
+    var venueCity = titleCaseDefensive(data.city || vp.city || '');
     var addrLine = data.address || vp.address_line_1 || '';
     var hoodLine = vp.neighborhood || '';
     // mapsUrl computado upfront para reusarlo en el chip del hero y la card "Dónde".
