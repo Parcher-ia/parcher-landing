@@ -1621,6 +1621,89 @@ footer a:hover { color: var(--color-ink); }
   background: rgba(15, 23, 48, 0.12);
   color: var(--tinta);
 }
+
+/* ── Variante FOTO §6bis (plan-revision v4) ────────────────────────────────
+   Foto de ambiente duotonada (tinta → ocasión → crema) como background,
+   título sobre PILL del color con fg §5.6.1, conteo en pill crema TR.
+   Foto carga lazy · si falla el background-color (var(--c)) queda como
+   fallback plano. */
+.cat-occasion-card-photo {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  padding: 0;
+  min-height: 0;
+  border: 1.5px solid var(--tinta);
+  display: block;
+  /* el block + position:relative ya forma stacking context · color del
+     fallback aún visible si la img falla */
+}
+.cat-occasion-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 0;
+}
+.cat-occasion-card-photo .cat-occasion-meta {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.cat-occasion-card-photo .cat-occasion-label {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  background: var(--c, var(--marca));
+  color: var(--card-fg, var(--crema));
+  padding: 5px 12px 6px;
+  border-radius: 10px;
+}
+.cat-occasion-card-photo .cat-occasion-tagline {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  color: var(--crema);
+  text-shadow: 0 1px 6px rgba(15, 23, 48, 0.6);
+  opacity: 0.92;
+}
+.cat-occasion-count-tr {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  margin-top: 0;
+  background: var(--crema);
+  color: var(--tinta);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 9px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.04em;
+}
+.cat-occasion-card-photo.card-fg-tinta .cat-occasion-count-tr {
+  /* No invert · crema es OK como pill bg cuando label pill ya lleva fg tinta */
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+  .cat-occasion-card-photo { aspect-ratio: 4 / 5; }
+}
+@media (max-width: 599px) {
+  .cat-occasion-card-photo { aspect-ratio: 4 / 5; }
+  .cat-occasion-card-photo .cat-occasion-label { font-size: 15px; padding: 4px 10px 5px; }
+  .cat-occasion-card-photo .cat-occasion-tagline { font-size: 10.5px; }
+}
 .cat-occasion-card:hover  { transform: translate(0, -3px); box-shadow: 0 7px 0 var(--tinta); }
 .cat-occasion-card:active { transform: translate(0, 1px); box-shadow: 0 2px 0 var(--tinta); }
 .cat-occasion-label {
