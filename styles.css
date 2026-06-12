@@ -1418,6 +1418,145 @@ footer a:hover { color: var(--color-ink); }
    Páginas SEO de discovery por ciudad y ocasión · cero JS · brand consistente.
    ======================================================================== */
 
+/* ── Hero "Esta noche" (city index) ─────────────────────────────────────── */
+.city-tonight { padding: var(--space-9) 0 var(--space-3); }
+.city-tonight-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+  margin: 0 0 var(--space-3);
+}
+.city-tonight h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(36px, 5.5vw, 60px);
+  letter-spacing: -0.022em;
+  line-height: 1.04;
+  margin: var(--space-2) 0 var(--space-2);
+}
+.city-tonight h1 .accent {
+  font-style: italic;
+  color: var(--marca);
+  font-family: var(--font-display);
+}
+.city-tonight-sub {
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--color-fg-muted);
+  margin: 0 0 var(--space-6);
+}
+
+/* Rail horizontal de cards 3:4 con cover */
+.city-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 248px;
+  gap: var(--space-5);
+  overflow-x: auto;
+  padding: var(--space-5) var(--space-7) var(--space-8);
+  scroll-padding-left: var(--space-7);
+  max-width: 1120px;
+  margin: 0 auto;
+  scrollbar-width: none;
+}
+.city-rail::-webkit-scrollbar { display: none; }
+
+.city-rail-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  border: 1.5px solid var(--tinta);
+  box-shadow: 0 4px 0 rgba(15, 23, 48, 0.85);
+  background: var(--tinta);
+  color: var(--crema);
+  text-decoration: none;
+  display: block;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.city-rail-card:hover  { transform: translate(0, -3px); box-shadow: 0 7px 0 rgba(15, 23, 48, 0.85); }
+.city-rail-card:active { transform: translate(0, 1px); box-shadow: 0 2px 0 rgba(15, 23, 48, 0.85); }
+.city-rail-card img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.city-rail-cover-empty {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--color-cali), var(--marca));
+  opacity: 0.6;
+}
+.city-rail-shade {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(15,23,48,0) 38%, rgba(15,23,48,.55) 62%, rgba(15,23,48,.92) 100%);
+}
+.city-rail-when {
+  position: absolute; top: 12px; left: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--crema);
+  color: var(--tinta);
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+.city-rail-meta {
+  position: absolute; left: 14px; right: 14px; bottom: 14px;
+}
+.city-rail-meta h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
+  /* trunca a 2 líneas */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.city-rail-meta span {
+  font-size: 12.5px;
+  opacity: 0.85;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.city-rail-more {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  border-radius: 18px;
+  border: 1.5px dashed rgba(15, 23, 48, 0.35);
+  color: var(--color-fg-muted);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  padding: var(--space-5);
+  text-decoration: none;
+}
+.city-rail-more:hover { color: var(--marca); border-color: var(--marca); }
+
+@media (max-width: 720px) {
+  .city-tonight { padding-top: var(--space-7); }
+  .city-rail {
+    grid-auto-columns: 200px;
+    padding: var(--space-4) var(--space-6) var(--space-7);
+    gap: var(--space-4);
+  }
+  .city-rail-meta h3 { font-size: 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .city-rail-card { transition: none !important; }
+}
+
 .cat-page main { padding-top: var(--space-7); }
 
 /* Hero */
