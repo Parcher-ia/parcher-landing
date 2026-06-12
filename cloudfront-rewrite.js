@@ -1,6 +1,7 @@
 /* parcher-landing-rewrite — CloudFront Function (viewer-request)
  *
- * v6 (deep links del feed · 2026-06-12):
+ * v7 (búsqueda · 2026-06-13):
+ *   - /buscar                  → /app-index.html (la app · todos)
  *   - /e/<uuid>  móvil → /app-index.html (rail) · desktop/bots → prerender
  *   - /p/<shortcode>          → /shortcode.html (resolve client-side)
  *   - /buy/<uuid>             → /buy/<uuid>.html (track + redirect a ticketing)
@@ -63,8 +64,8 @@ function handler(event) {
     event.request.uri = uri + '.html';
     return event.request;
   }
-  // /f/<ocasión> → la app (deep links del feed · desktop también)
-  if (uri.substring(0, 3) === '/f/') {
+  // /f/<ocasión> y /buscar → la app (deep links del feed · desktop también)
+  if (uri.substring(0, 3) === '/f/' || uri === '/buscar') {
     event.request.uri = '/app-index.html';
     return event.request;
   }
