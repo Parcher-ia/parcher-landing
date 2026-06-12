@@ -33,22 +33,45 @@
   }
 
   function formatDateRangeCompact(startsAt, isAllDay) {
-    // Variante corta pa' la lente "Cuándo" · "vie 5 sept · 7:00 pm".
-    // Mantiene día abreviado (no full "sábado") y mes corto.
+    // Variante ultra-compacta pa' la lente "Cuándo" · puerto del arquetipo A
+    // del publisher (brand-tokens.ts fmtEventDate). Formato:
+    //   "vie 26/6 8pm"        ← con hora explícita
+    //   "vie 26/6 7:30pm"     ← con minutos != 00
+    //   "vie 26/6"            ← all-day o hora TBD
+    // En vez del antiguo "vie 5 sept · 7:00 pm" (~19 chars · 2-3 renglones
+    // en la lente compacta), este formato da ~12 chars · 1 renglón.
+    // TZ: America/Bogota — los eventos de Cali se interpretan localmente.
     if (!startsAt) return '';
-    var start = new Date(startsAt);
-    if (isNaN(start.getTime())) return '';
-    var dayStr = start.toLocaleDateString('es-CO', {
-      weekday: 'short', day: 'numeric', month: 'short',
-    }).replace(/,/g, '').replace(/\s+/g, ' ').trim();
-    if (isAllDay) return dayStr;
+    var d = new Date(startsAt);
+    if (isNaN(d.getTime())) return '';
+    var parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Bogota',
+      weekday: 'short',
+      day: '2-digit',
+      month: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    }).formatToParts(d);
+    function get(t) {
+      for (var i = 0; i < parts.length; i++) if (parts[i].type === t) return parts[i].value;
+      return '';
+    }
+    var WD = { sun:'dom', mon:'lun', tue:'mar', wed:'mié', thu:'jue', fri:'vie', sat:'sáb' };
+    var wd = WD[get('weekday').toLowerCase()] || get('weekday').toLowerCase();
+    var dd = String(parseInt(get('day'), 10)); // sin zero-pad pa' look natural
+    var m = get('month');
+    var dateStr = wd + ' ' + dd + '/' + m;
+    if (isAllDay) return dateStr;
+    // hora TBD = 00:00:00 UTC (convención backend) → omitir tiempo
     var isTimeTBD =
-      start.getUTCHours() === 0 &&
-      start.getUTCMinutes() === 0 &&
-      start.getUTCSeconds() === 0;
-    if (isTimeTBD) return dayStr;
-    var timeStr = start.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
-    return dayStr + ' · ' + timeStr;
+      d.getUTCHours() === 0 && d.getUTCMinutes() === 0 && d.getUTCSeconds() === 0;
+    if (isTimeTBD) return dateStr;
+    var h = get('hour');
+    var min = get('minute');
+    var period = (get('dayPeriod') || '').toLowerCase();
+    var time = min === '00' ? h + period : h + ':' + min + period;
+    return dateStr + ' ' + time;
   }
 
   function formatDateRange(startsAt, endsAt, isAllDay) {
