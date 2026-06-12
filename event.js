@@ -1034,12 +1034,41 @@
       '<div class="cta-secondary">@soyparcher</div>' +
       '</div></section>';
 
+    // Sticky CTA mobile · barra fija abajo con primary actions (entradas + WA).
+    // Solo se inyecta si hay al menos una acción primaria; CSS lo oculta en desktop.
+    var mobileCta = [];
+    if (ticketing.ticketing_url) {
+      mobileCta.push(
+        '<a class="cta-primary" href="' + escapeHtml(ticketing.ticketing_url) +
+        '" target="_blank" rel="noopener"' +
+        ' data-track="click_get_tickets"' +
+        ' data-track-event-id="' + escapeHtml(data.id || '') + '"' +
+        ' data-track-surface="mobile_sticky">' +
+        '<span>conseguir entradas</span></a>'
+      );
+    }
+    if (heroWaDigits) {
+      mobileCta.push(
+        '<a class="ev-action ev-action-whatsapp ev-action-contact" href="https://wa.me/' +
+        escapeHtml(heroWaDigits) +
+        '" target="_blank" rel="noopener"' +
+        ' aria-label="abrir WhatsApp con el organizador"' +
+        ' data-track="click_whatsapp_contact"' +
+        ' data-track-event-id="' + escapeHtml(data.id || '') + '"' +
+        ' data-track-surface="mobile_sticky">' +
+        WA_ICON + '<span>WhatsApp</span></a>'
+      );
+    }
+    var mobileCtaHtml = mobileCta.length
+      ? '<div class="ev-mobile-cta" role="region" aria-label="acciones">' + mobileCta.join('') + '</div>'
+      : '';
+
     // Orden: Hero (todo) → Dónde → Detalles → Tags (etiquetas footprint).
     // CTA final NO se renderea acá · vive estático en el prerender HTML
     // entre <aside class="ev-related-categories"> y <footer>, para que
     // related cards aparezcan ANTES del CTA DM (review Iris 2026-06-12).
     root.innerHTML =
-      heroHtml + dondeHtml + detailsHtml + tagsHtml;
+      heroHtml + dondeHtml + detailsHtml + tagsHtml + mobileCtaHtml;
 
     if (data.title) {
       document.title = data.title + ' · parcher';

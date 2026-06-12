@@ -701,12 +701,9 @@ footer a:hover { color: var(--color-ink); }
 }
 
 /* ── Lentes (ADR 013 · Cuándo / Dónde / Cuánto) · top del hero ─────────────
-   Cards compactas con border-top de color por categoría:
-     Cuándo → --color-pacific (musgo · tiempo/serenidad)
-     Dónde  → --color-cali    (mango · territorial/CALI)
-     Cuánto → --marca         (magenta · valor)
-   1 col en mobile, 3 col desde tablet. Sin stamp shadow pa' que se sientan
-   como filtros, no como cards independientes. */
+   "Less mono" del rediseño Iris: solo el label sigue en mono (micro-label),
+   los values pasan a Plus Jakarta Sans (body). Facts row más estamparizada:
+   1 stamp con 3 columnas en desktop, scroll horizontal en mobile chico. */
 .ev-lentes {
   display: grid;
   grid-template-columns: 1fr;
@@ -745,10 +742,11 @@ footer a:hover { color: var(--color-ink); }
   color: var(--color-fg-muted);
 }
 .ev-lens-value {
-  font-family: var(--font-display);
+  /* Less mono · pasa de display a body (Iris: fechas/venue/precios → Jakarta) */
+  font-family: var(--font-body);
   font-size: clamp(13px, 1.6vw, 15px);
   font-weight: 600;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.008em;
   line-height: 1.2;
   color: var(--color-fg);
 }
@@ -824,6 +822,12 @@ footer a:hover { color: var(--color-ink); }
     max-width: 720px;
     align-items: start;
   }
+  /* Poster sticky · sigue al usuario mientras lee el contenido del info-col */
+  .ev-hero-poster-col {
+    position: sticky;
+    top: var(--space-7);
+    align-self: start;
+  }
   .ev-hero-info-col .ev-title {
     margin-top: 0;
     /* Título constrain dentro del info-col · clamp más conservador
@@ -884,16 +888,19 @@ footer a:hover { color: var(--color-ink); }
   align-items: center;
   padding: 6px 12px;
   border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
+  /* Less mono · pills van en body, mono reservado a micro-labels */
+  font-family: var(--font-body);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   background: var(--color-crema);
   border: 1px solid var(--color-line);
   color: var(--color-ink);
 }
-.ev-chip-date  { background: var(--color-cali);    color: var(--color-ink); border-color: transparent; }
-.ev-chip-place { background: var(--color-ink);     color: var(--color-cali); border-color: transparent; }
+/* "Less mono" del rediseño Iris: chips de date/place/city usan Jakarta Sans
+   en lugar del mono · solo micro-labels (eyebrow, eyebrows de sección) siguen mono. */
+.ev-chip-date  { background: var(--color-cali);    color: var(--color-ink); border-color: transparent; font-family: var(--font-body); }
+.ev-chip-place { background: var(--color-ink);     color: var(--color-cali); border-color: transparent; font-family: var(--font-body); }
 .ev-chip-city  { background: transparent; color: var(--color-fg-muted); }
 .ev-chip-vibe  { background: var(--color-magenta); color: #fff;            border-color: transparent; }
 .ev-chip-tag   { background: rgba(15, 23, 48, 0.08); color: var(--color-ink); }
@@ -1177,13 +1184,44 @@ footer a:hover { color: var(--color-ink); }
 
 /* ----- acciones row (entradas + calendar + share) -----
    Variante -hero: vive arriba en el ev-hero (debajo del disclaimer).
-   El cta-primary lidera, calendar + whatsapp son secundarias outlined. */
+   El cta-primary lidera, calendar + whatsapp son secundarias outlined.
+   En mobile, además, hay un sticky-bottom-bar (.ev-mobile-cta) que
+   surfaces solo las dos acciones primarias (entradas + WhatsApp)
+   para que estén siempre al alcance del pulgar. */
 .ev-actions-row {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-4);
   margin: var(--space-7) 0 0;
   align-items: center;
+}
+/* ── Sticky CTA mobile · barra fija abajo con primary actions ──────────── */
+.ev-mobile-cta {
+  display: none; /* desktop hidden · solo aparece en mobile */
+}
+@media (max-width: 767px) {
+  body.event-page { padding-bottom: 84px; /* reserva espacio · safe-area-inset */ }
+  .ev-mobile-cta {
+    display: flex;
+    gap: var(--space-3);
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    padding: var(--space-4) var(--space-5) calc(var(--space-4) + env(safe-area-inset-bottom, 0));
+    background: var(--crema);
+    border-top: 1.5px solid var(--tinta);
+    box-shadow: 0 -4px 16px rgba(15, 23, 48, 0.08);
+    z-index: 20;
+  }
+  .ev-mobile-cta .cta-primary,
+  .ev-mobile-cta .ev-action-contact {
+    margin: 0;
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+    padding: 14px 10px;
+    font-size: 14px;
+  }
+  .ev-mobile-cta .ev-action-contact span:last-child { display: none; } /* solo icono en mobile */
 }
 .ev-actions-row-hero {
   margin: var(--space-7) 0 0;
