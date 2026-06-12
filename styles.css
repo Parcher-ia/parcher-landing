@@ -1493,6 +1493,23 @@ footer a:hover { color: var(--color-ink); }
   object-fit: cover; object-position: center;
   display: block;
 }
+.cat-event-cover-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-cali) 0%, var(--color-salsa) 100%);
+  opacity: 0.4;
+}
+.cat-event-cover-empty::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 28px;
+  background: var(--color-crema);
+  -webkit-mask: radial-gradient(circle at 50% 50%, var(--color-crema) 50%, transparent 50%) no-repeat center / contain;
+          mask: radial-gradient(circle at 50% 50%, var(--color-crema) 50%, transparent 50%) no-repeat center / contain;
+  border-radius: 50%;
+}
 .cat-event-info {
   display: flex;
   flex-direction: column;
@@ -1548,6 +1565,51 @@ footer a:hover { color: var(--color-ink); }
 
 @media (prefers-reduced-motion: reduce) {
   .cat-occasion-card, .cat-event-card { transition: none !important; }
+}
+
+/* ── Related categories (event detail · más parches como este) ─────────────
+   Vive entre </main> y <footer> · sobrevive al render JS de event.js
+   (que reemplaza #ev-root). Internal linking SEO + UX afín al evento. */
+.ev-related-categories {
+  padding: var(--space-9) 0 var(--space-7);
+  border-top: 1px solid var(--color-line);
+}
+.ev-related-categories .eyebrow { margin-bottom: var(--space-5); }
+.ev-related-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  max-width: 720px;
+}
+.ev-related-card {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-4) var(--space-5);
+  background: var(--c, var(--marca));
+  color: var(--crema);
+  border-radius: var(--radius-md);
+  box-shadow: 0 3px 0 var(--tinta);
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.ev-related-card:hover  { transform: translate(0, -2px); box-shadow: 0 5px 0 var(--tinta); }
+.ev-related-card:active { transform: translate(0, 1px); box-shadow: 0 2px 0 var(--tinta); }
+.ev-related-label {
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.6vw, 17px);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+}
+.ev-related-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ev-related-card { transition: none !important; }
 }
 
 /* ----- error / 404 ----- */
