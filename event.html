@@ -6,13 +6,22 @@
   <title>parcher · detalle del parche</title>
   <meta name="description" content="detalle del parche en parcher. mandame DM en @soyparcher y te paso más." />
 
-  <!-- open graph (genéricos en este cut) -->
+  <!-- event.html es el fallback que sirve la CDN sólo si el prerender por
+       evento no está · ese estado es transitorio (race condition entre
+       ingesta y prerender). Lo marcamos noindex pa' que Google no agarre
+       este shell genérico como canon. Los prerenders sí van index/follow. -->
+  <meta name="robots" content="noindex, follow" />
+
+  <!-- open graph (genéricos en este fallback · los prerenders pisan con valores reales) -->
   <meta property="og:title" content="parcher · vení, parchate." />
-  <meta property="og:description" content="los parches de tu ciudad, viernes a viernes." />
+  <meta property="og:description" content="los parches de tu ciudad." />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://parcher.co" />
+  <meta property="og:url" content="https://parcher.co/" />
   <meta property="og:image" content="https://parcher.co/assets/og-image.png" />
+  <meta property="og:locale" content="es_CO" />
+  <meta property="og:site_name" content="parcher" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@soyparcher" />
 
   <link rel="icon" type="image/svg+xml" href="/assets/logo/parcher-monogram-avatar.svg" />
 
