@@ -324,6 +324,37 @@
     return { first: m[1], rest: m[3] };
   }
 
+  // Mapping de ocasiones (Set F · ADR 013) · key → label + color token + fg.
+  // Coincide con catalog.json $.ocasiones_canonicas y los aliases
+  // --ocasion-* del catalog.css. fg sigue regla §5.5 (sol/rosa/jade → tinta).
+  var OCASION_MAP = {
+    live_shows:   { label: 'Ver en vivo',         token: 'live-shows',   fg: 'crema' },
+    with_friends: { label: 'Con el parche',       token: 'with-friends', fg: 'crema' },
+    with_family:  { label: 'Plan en familia',     token: 'with-family',  fg: 'tinta' },
+    with_partner: { label: 'Con la pareja',       token: 'with-partner', fg: 'tinta' },
+    explore_city: { label: 'Descubrir la ciudad', token: 'explore-city', fg: 'crema' },
+    learn_create: { label: 'Aprender y crear',    token: 'learn-create', fg: 'crema' },
+    recharge:     { label: 'Recargar',            token: 'recharge',     fg: 'tinta' },
+    meet_people:  { label: 'Conocer gente',       token: 'meet-people',  fg: 'crema' },
+  };
+
+  function buildOccasionChips(data) {
+    var arr = Array.isArray(data.occasions) ? data.occasions : [];
+    if (!arr.length) return '';
+    var chips = arr.map(function (key) {
+      var info = OCASION_MAP[String(key).toLowerCase()];
+      if (!info) return '';
+      return (
+        '<span class="ev-occasion-chip" style="--c: var(--ocasion-' + info.token +
+        '); --ct: var(--' + info.fg + ');">' +
+        escapeHtml(info.label) +
+        '</span>'
+      );
+    }).filter(function (s) { return s; }).join('');
+    if (!chips) return '';
+    return '<div class="ev-occasions" aria-label="ocasiones del evento">' + chips + '</div>';
+  }
+
   function pickHeroDescription(data, enr, descs) {
     // Hero usa la versión más larga disponible · pull-down ordenado:
     // description_extended → description_enriched → long → medium → short → short_summary.
@@ -668,11 +699,13 @@
         coverHtmlInner +
         sourceMiniHtml +
       '</div>';
+    var occasionChipsHtml = buildOccasionChips(data);
     var heroInfoCol =
       '<div class="ev-hero-info-col">' +
         '<h1 class="ev-title">' +
         escapeHtml(data.title || 'parche sin título') +
         '</h1>' +
+        occasionChipsHtml +
         '<div class="ev-meta">' +
           placeChipHtml +
           (venueCity ? chip(venueCity, 'city') : '') +

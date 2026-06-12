@@ -666,6 +666,30 @@ footer a:hover { color: var(--color-ink); }
 /* ----- hero ----- */
 .ev-hero { padding-top: var(--space-10); }
 
+/* ── Ocasiones del evento (M:N · Set F · ADR 013) ──────────────────────────
+   Chips coloreados con --ocasion-* del catalog · uno por cada key en
+   events.occasions. Van debajo del title, antes del meta row · contextualizan
+   "qué tipo de plan es esto" antes que las dimensiones cuándo/dónde/cuánto. */
+.ev-occasions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+}
+.ev-occasion-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: var(--c, var(--marca));
+  color: var(--ct, var(--crema));
+  white-space: nowrap;
+}
+
 /* ── Lentes (ADR 013 · Cuándo / Dónde / Cuánto) · top del hero ─────────────
    Cards compactas con border-top de color por categoría:
      Cuándo → --color-pacific (musgo · tiempo/serenidad)
