@@ -335,6 +335,76 @@
     return PRICE_LEVEL_MAP[String(level).toLowerCase()] || null;
   }
 
+  // Facts row helpers (rediseño Iris) · cada fact tiene { strong, small }.
+  // strong = Jakarta Sans (body) bold · small = body 12px muted.
+
+  function buildWhenFact(data) {
+    var iso = data.starts_at;
+    if (!iso) return { strong: 'por confirmar', small: '' };
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return { strong: '', small: '' };
+    var dayParts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Bogota',
+      weekday: 'short', day: '2-digit', month: 'numeric',
+    }).formatToParts(d);
+    var getDay = function (t) {
+      for (var i = 0; i < dayParts.length; i++) if (dayParts[i].type === t) return dayParts[i].value;
+      return '';
+    };
+    var WD = { sun:'dom', mon:'lun', tue:'mar', wed:'mié', thu:'jue', fri:'vie', sat:'sáb' };
+    var wd = WD[getDay('weekday').toLowerCase()] || getDay('weekday').toLowerCase();
+    var dd = String(parseInt(getDay('day'), 10));
+    var m = getDay('month');
+    var strong = wd + ' ' + dd + '/' + m;
+    // small = hora si confirmada · sin "12am" fantasma
+    if (data.is_all_day) return { strong: strong, small: 'todo el día' };
+    var isTBD = d.getUTCHours() === 0 && d.getUTCMinutes() === 0 && d.getUTCSeconds() === 0;
+    if (isTBD) return { strong: strong, small: 'hora por confirmar' };
+    var tParts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Bogota', hour: 'numeric', minute: '2-digit', hour12: true,
+    }).formatToParts(d);
+    var getT = function (t) {
+      for (var i = 0; i < tParts.length; i++) if (tParts[i].type === t) return tParts[i].value;
+      return '';
+    };
+    var h = getT('hour');
+    var min = getT('minute');
+    var period = (getT('dayPeriod') || '').toLowerCase();
+    if (min === '00' && h === '12' && period === 'am') return { strong: strong, small: '' };
+    var time = min === '00' ? h + period : h + ':' + min + period;
+    return { strong: strong, small: time };
+  }
+
+  function buildWhereFact(data) {
+    var vp = data.venue_profile || {};
+    var venue = titleCaseDefensive(vp.canonical_name || data.place_name || '');
+    var city = titleCaseDefensive(data.city || vp.city || 'Cali');
+    var zone = vp.zone ? titleCaseDefensive(String(vp.zone)) : '';
+    if (!venue && city) return { strong: city, small: '' };
+    var small = '';
+    if (zone && city) small = zone + ' · ' + city;
+    else if (zone) small = zone;
+    else if (city && venue && city.toLowerCase() !== venue.toLowerCase()) small = city;
+    return { strong: venue || 'por confirmar', small: small };
+  }
+
+  function buildBudgetFact(data) {
+    var t = data.event_ticketing || {};
+    var f = (data.price_from != null) ? data.price_from : t.price_from;
+    var to = (data.price_to != null) ? data.price_to : t.price_to;
+    var cur = (data.currency || t.currency || 'COP').toUpperCase();
+    function compact(n) { return n >= 1000 ? Math.round(n / 1000) + 'K' : String(n); }
+    if (f === 0 || t.ticketing_type === 'free') return { strong: 'Gratis', small: '' };
+    if (f != null && to != null && Number(f) !== Number(to)) {
+      return { strong: cur + ' ' + compact(f), small: 'hasta ' + compact(to) };
+    }
+    if (f != null) return { strong: cur + ' ' + compact(f), small: '' };
+    var vp = data.venue_profile || {};
+    var info = priceLevelInfo(vp.price_level);
+    if (info) return { strong: info.label, small: info.symbol };
+    return { strong: 'Consultar', small: '' };
+  }
+
   function formatLensWhere(data) {
     var vp = data.venue_profile || {};
     var zone = vp.zone || '';
@@ -579,29 +649,24 @@
     // Esto reemplaza la composición vieja (meta+disclaimer pegados al título)
     // que dejaba la descripción "perdida abajo" en el bloque "detalles".
 
-    // 1 · Lentes (Cuándo/Dónde/Cuánto · ADR 013 · catalog.lenses.{when,where,budget}_labels.co)
-    //     formatDateRangeCompact → "vie 5 sept · 7:00 pm" (no full "sábado")
-    var whenCompact = formatDateRangeCompact(data.starts_at, data.is_all_day) || 'por confirmar';
+    // 1 · Facts row única (rediseño Iris · stamp con border + shadow + 3 cols)
+    //     Cada fact: label mono + strong (Jakarta body) + small subtext.
+    //     Mobile: scroll horizontal flex en vez de grid.
+    var whenFact = buildWhenFact(data);
+    var whereFact = buildWhereFact(data);
+    var budgetFact = buildBudgetFact(data);
+    function renderFact(label, strong, small) {
+      return '<div class="ev-fact">' +
+        '<span class="ev-fact-label">' + escapeHtml(label) + '</span>' +
+        '<strong>' + escapeHtml(strong || '—') + '</strong>' +
+        (small ? '<small>' + escapeHtml(small) + '</small>' : '') +
+      '</div>';
+    }
     var lentesHtml =
-      '<div class="ev-lentes" role="group" aria-label="lentes del evento">' +
-        '<div class="ev-lens-chip ev-lens-when">' +
-          '<span class="ev-lens-label">Cuándo</span>' +
-          '<span class="ev-lens-value">' +
-          escapeHtml(whenCompact) +
-          '</span>' +
-        '</div>' +
-        '<div class="ev-lens-chip ev-lens-where">' +
-          '<span class="ev-lens-label">Dónde</span>' +
-          '<span class="ev-lens-value">' +
-          escapeHtml(formatLensWhere(data)) +
-          '</span>' +
-        '</div>' +
-        '<div class="ev-lens-chip ev-lens-budget">' +
-          '<span class="ev-lens-label">Cuánto</span>' +
-          '<span class="ev-lens-value">' +
-          escapeHtml(formatLensBudget(data)) +
-          '</span>' +
-        '</div>' +
+      '<div class="ev-facts" role="group" aria-label="datos del evento">' +
+        renderFact('Cuándo', whenFact.strong, whenFact.small) +
+        renderFact('Dónde', whereFact.strong, whereFact.small) +
+        renderFact('Cuánto', budgetFact.strong, budgetFact.small) +
       '</div>';
 
     // 3 · Fuente mini (low-contrast just below image)
@@ -773,9 +838,14 @@
     // Mobile stack normal (un solo column). Lentes arriba, lineup/descripción/disclaimer/
     // actions abajo full-width (no caben bien en la columna angosta o necesitan respirar).
     // Meta drop date chip: el lens "Cuándo" arriba ya lo cubre · evitamos redundancia.
+    // ev-cover wrap incluye .ev-cover-frame con --bg CSS var · solo se ve en
+    // mobile (banner full-bleed con blur del propio cover detrás · mock Iris).
     var coverHtmlInner = cover
-      ? '<div class="ev-cover"><img src="' +
-        escapeHtml(cover) + '" alt="" loading="eager" /></div>'
+      ? '<div class="ev-cover">' +
+        '<div class="ev-cover-frame" style="--bg: url(\'' + escapeHtml(cover) + '\')">' +
+        '<img src="' + escapeHtml(cover) + '" alt="" loading="eager" />' +
+        '</div>' +
+        '</div>'
       : '';
     var heroPosterCol =
       '<div class="ev-hero-poster-col">' +

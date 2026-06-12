@@ -1,14 +1,15 @@
 {
   "$metadata": {
-    "version": "2.0.0",
-    "tokens_source_version": "4.2",
+    "version": "2.0.5",
+    "tokens_source_version": "4.4",
     "source": "marca_parcher/tokens.json",
     "generator": "parcher-ia-backend/scripts/build-catalog.ts",
-    "generated_at": "2026-06-10T01:09:25.521Z",
+    "generated_at": "2026-06-12T10:39:51.855Z",
     "gaps": [
-      "vibe_to_cluster_hints: aún no canónico en tokens.json — stub vacío hasta que se ratifique en Fase 2 (Editor)."
+      "vibe_to_cluster_hints: aún no canónico en tokens.json — stub vacío hasta que se ratifique en Fase 2 (Editor).",
+      "moment_priors: aún no canónico en tokens.json — valores provisionales derivados de brand-book §8.4.1, pendiente ratificación de marca."
     ],
-    "checksum_sha256": "df3176fa12f7f75d4f6793b11d7be61eb9cde84eb55ea4142d5d31b9ebe66e5b"
+    "checksum_sha256": "4cdf6d8557c4b3652115097dd615acda914d06aa971e732f0ef6c896c4d889cf"
   },
   "clusters_top_level": [
     "CULTURA",
@@ -130,7 +131,7 @@
     {
       "name": "SHOW",
       "color_hex": "#A12F86",
-      "family": "UNKNOWN",
+      "family": "MAGENTA",
       "hashtag": "#show",
       "top_level": true,
       "sub_tags": [
@@ -154,7 +155,10 @@
         "escuchar",
         "cantar"
       ],
-      "fg_token": "crema"
+      "fg_token": "crema",
+      "labels": {
+        "co": "Show"
+      }
     },
     {
       "name": "COMIDA",
@@ -196,7 +200,10 @@
       "accepts_actions": [
         "jugar"
       ],
-      "fg_token": "crema"
+      "fg_token": "crema",
+      "labels": {
+        "co": "Aire Libre"
+      }
     },
     {
       "name": "DEPORTE",
@@ -337,7 +344,10 @@
       "accepts_actions": [
         "sentir"
       ],
-      "fg_token": "tinta"
+      "fg_token": "tinta",
+      "labels": {
+        "co": "Bienestar"
+      }
     },
     {
       "name": "EXPO",
@@ -383,6 +393,7 @@
     "live_shows": {
       "label": "Ver en vivo",
       "color_dominante_hex": "#A12F86",
+      "fg_token": "crema",
       "order": 1,
       "kind": "occasion",
       "labels": {
@@ -392,6 +403,7 @@
     "with_friends": {
       "label": "Con el parche",
       "color_dominante_hex": "#4B8FBF",
+      "fg_token": "crema",
       "order": 2,
       "kind": "occasion",
       "labels": {
@@ -401,6 +413,7 @@
     "with_family": {
       "label": "Plan en familia",
       "color_dominante_hex": "#E8C233",
+      "fg_token": "tinta",
       "order": 3,
       "kind": "occasion",
       "labels": {
@@ -410,6 +423,7 @@
     "with_partner": {
       "label": "Con la pareja",
       "color_dominante_hex": "#E5A0A8",
+      "fg_token": "tinta",
       "order": 4,
       "kind": "occasion",
       "labels": {
@@ -419,6 +433,7 @@
     "explore_city": {
       "label": "Descubrir la ciudad",
       "color_dominante_hex": "#1F8E96",
+      "fg_token": "crema",
       "order": 5,
       "kind": "occasion",
       "labels": {
@@ -428,6 +443,7 @@
     "learn_create": {
       "label": "Aprender y crear",
       "color_dominante_hex": "#C13D60",
+      "fg_token": "crema",
       "order": 6,
       "kind": "occasion",
       "labels": {
@@ -437,6 +453,7 @@
     "recharge": {
       "label": "Recargar",
       "color_dominante_hex": "#5DC4A8",
+      "fg_token": "tinta",
       "order": 7,
       "kind": "occasion",
       "labels": {
@@ -446,6 +463,7 @@
     "meet_people": {
       "label": "Conocer gente",
       "color_dominante_hex": "#7A3D5E",
+      "fg_token": "crema",
       "order": 8,
       "kind": "occasion",
       "labels": {
@@ -663,6 +681,97 @@
       ]
     }
   ],
+  "moment_priors": {
+    "$source": "brand-book §8.4.1 vía editorial-calendar del publisher · derivación provisional Fase 0 E5",
+    "$status": "PROVISIONAL — pendiente ratificación de marca (Iris)",
+    "timezone": "America/Bogota",
+    "franjas": {
+      "morning": [
+        6,
+        12
+      ],
+      "afternoon": [
+        12,
+        18
+      ],
+      "night": [
+        18,
+        24
+      ],
+      "late": [
+        0,
+        6
+      ]
+    },
+    "matrix": {
+      "monday": {
+        "night": {
+          "learn_create": 1.4
+        }
+      },
+      "tuesday": {
+        "afternoon": {
+          "meet_people": 1.4
+        },
+        "night": {
+          "meet_people": 1.3
+        }
+      },
+      "wednesday": {
+        "night": {
+          "recharge": 1.4
+        }
+      },
+      "thursday": {
+        "afternoon": {
+          "live_shows": 1.2,
+          "with_friends": 1.2
+        },
+        "night": {
+          "live_shows": 1.4,
+          "with_friends": 1.3
+        }
+      },
+      "friday": {
+        "night": {
+          "live_shows": 1.5,
+          "with_friends": 1.4
+        },
+        "late": {
+          "live_shows": 1.4,
+          "with_friends": 1.3
+        }
+      },
+      "saturday": {
+        "afternoon": {
+          "with_friends": 1.2
+        },
+        "night": {
+          "with_friends": 1.5,
+          "with_partner": 1.4,
+          "live_shows": 1.3
+        },
+        "late": {
+          "with_friends": 1.4,
+          "live_shows": 1.3
+        }
+      },
+      "sunday": {
+        "morning": {
+          "with_family": 1.5,
+          "explore_city": 1.3
+        },
+        "afternoon": {
+          "with_family": 1.4,
+          "explore_city": 1.3,
+          "recharge": 1.2
+        },
+        "night": {
+          "recharge": 1.2
+        }
+      }
+    }
+  },
   "vibe_to_cluster_hints": {
     "$gap": "Pending canonical definition. Editor MUST treat as empty until populated."
   }

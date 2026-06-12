@@ -700,10 +700,116 @@ footer a:hover { color: var(--color-ink); }
   .ev-occasion-chip-link { transition: none !important; }
 }
 
-/* ── Lentes (ADR 013 · Cuándo / Dónde / Cuánto) · top del hero ─────────────
-   "Less mono" del rediseño Iris: solo el label sigue en mono (micro-label),
-   los values pasan a Plus Jakarta Sans (body). Facts row más estamparizada:
-   1 stamp con 3 columnas en desktop, scroll horizontal en mobile chico. */
+/* ── Facts row (rediseño Iris 2026-06-12 · supersede .ev-lentes) ────────────
+   1 stamp con 3 cols (Cuándo / Dónde / Cuánto) · border tinta + shadow stamp.
+   Mobile: flex con scroll horizontal · cada fact min-width 130px. */
+.ev-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1.5px solid var(--tinta);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #FFFBF2;
+  box-shadow: 0 3px 0 var(--tinta);
+  margin: 0 0 var(--space-5);
+  max-width: 720px;
+}
+.ev-fact { padding: 12px 16px; min-width: 0; }
+.ev-fact + .ev-fact { border-left: 1px solid var(--color-line); }
+.ev-fact-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+  margin-bottom: 3px;
+}
+.ev-fact strong {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.008em;
+  /* trunca a 1 línea con ellipsis */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ev-fact small {
+  display: block;
+  font-size: 12px;
+  color: var(--color-fg-muted);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .ev-facts {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .ev-facts::-webkit-scrollbar { display: none; }
+  .ev-fact {
+    flex: 1 0 auto;
+    min-width: 140px;
+  }
+  .ev-fact + .ev-fact { border-left: 1px solid var(--color-line); border-top: 0; }
+}
+
+/* Banner blur mobile pa' el cover · solo ≤760px · desktop sin cambio. */
+.ev-cover-frame { display: contents; }
+@media (max-width: 760px) {
+  .ev-cover {
+    margin-left: calc(-1 * var(--space-7));
+    margin-right: calc(-1 * var(--space-7));
+    margin-bottom: var(--space-5);
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+    max-width: none;
+  }
+  .ev-cover-frame {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    max-height: 64vh;
+    background: var(--tinta);
+  }
+  .ev-cover-frame::before {
+    content: '';
+    position: absolute;
+    inset: -30px;
+    background-image: var(--bg);
+    background-size: cover;
+    background-position: center;
+    filter: blur(28px) brightness(0.55);
+    transform: scale(1.15);
+    z-index: 0;
+  }
+  .ev-cover img {
+    position: relative;
+    z-index: 1;
+    width: auto;
+    height: auto;
+    max-width: 78%;
+    max-height: 60vh;
+    margin: 20px auto;
+    border-radius: 14px;
+    aspect-ratio: auto;
+    box-shadow: 0 4px 16px rgba(15, 23, 48, 0.4);
+    object-fit: initial;
+  }
+}
+
+/* ── Lentes (legacy · mantenido por si algún prerender viejo aún los usa) ── */
 .ev-lentes {
   display: grid;
   grid-template-columns: 1fr;
