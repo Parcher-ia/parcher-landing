@@ -684,6 +684,26 @@
       '<line x1="3" y1="10" x2="21" y2="10"/></svg>';
 
     var heroCtas = [];
+    // Contacto WhatsApp del organizador · botón verde con icono · va PRIMERO
+    // (antes de entradas si hay) para que el usuario pueda contactar
+    // directamente al organizador sin pasar por ticketing intermediario.
+    // El número viene de ticketing.whatsapp · phone como fallback.
+    var heroWaDigits = ticketing.whatsapp
+      ? String(ticketing.whatsapp).replace(/\D/g, '')
+      : (ticketing.phone ? String(ticketing.phone).replace(/\D/g, '') : '');
+    if (heroWaDigits) {
+      heroCtas.push(
+        '<a class="ev-action ev-action-whatsapp ev-action-contact" href="https://wa.me/' +
+          escapeHtml(heroWaDigits) +
+          '" target="_blank" rel="noopener"' +
+          ' aria-label="abrir WhatsApp con el organizador"' +
+          ' data-track="click_whatsapp_contact"' +
+          ' data-track-event-id="' + escapeHtml(data.id || '') + '"' +
+          ' data-track-surface="hero">' +
+          WA_ICON +
+          '<span>WhatsApp</span></a>'
+      );
+    }
     if (ticketing.ticketing_url) {
       var availHtmlHero = availabilityBadge(ticketing.availability_status);
       heroCtas.push(
