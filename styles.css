@@ -1449,6 +1449,13 @@ footer a:hover { color: var(--color-ink); }
   margin: 0 0 var(--space-6);
 }
 
+/* Wrap del rail · permite posicionar arrows desktop al lado del scroll. */
+.city-rail-wrap {
+  position: relative;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
 /* Rail horizontal de cards 3:4 con cover */
 .city-rail {
   display: grid;
@@ -1458,11 +1465,44 @@ footer a:hover { color: var(--color-ink); }
   overflow-x: auto;
   padding: var(--space-5) var(--space-7) var(--space-8);
   scroll-padding-left: var(--space-7);
-  max-width: 1120px;
-  margin: 0 auto;
+  scroll-behavior: smooth;
   scrollbar-width: none;
 }
 .city-rail::-webkit-scrollbar { display: none; }
+
+/* Arrows · solo desktop · tap target generoso · stamp shadow consistente */
+.city-rail-arrow {
+  display: none; /* mobile usa touch scroll · no arrows */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--tinta);
+  background: var(--crema);
+  color: var(--tinta);
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 3;
+  padding: 0 0 4px;
+  box-shadow: 0 3px 0 var(--tinta);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.city-rail-arrow:hover  { transform: translateY(calc(-50% - 2px)); box-shadow: 0 5px 0 var(--tinta); }
+.city-rail-arrow:active { transform: translateY(calc(-50% + 1px)); box-shadow: 0 2px 0 var(--tinta); }
+.city-rail-arrow-prev { left: calc(var(--space-7) - 22px); }
+.city-rail-arrow-next { right: calc(var(--space-7) - 22px); }
+@media (min-width: 768px) {
+  .city-rail-arrow { display: grid; place-items: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .city-rail { scroll-behavior: auto; }
+  .city-rail-arrow { transition: none !important; }
+}
 
 .city-rail-card {
   position: relative;
@@ -1622,88 +1662,10 @@ footer a:hover { color: var(--color-ink); }
   color: var(--tinta);
 }
 
-/* ── Variante FOTO §6bis (plan-revision v4) ────────────────────────────────
-   Foto de ambiente duotonada (tinta → ocasión → crema) como background,
-   título sobre PILL del color con fg §5.6.1, conteo en pill crema TR.
-   Foto carga lazy · si falla el background-color (var(--c)) queda como
-   fallback plano. */
-.cat-occasion-card-photo {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  padding: 0;
-  min-height: 0;
-  border: 1.5px solid var(--tinta);
-  display: block;
-  /* el block + position:relative ya forma stacking context · color del
-     fallback aún visible si la img falla */
-}
-.cat-occasion-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-  z-index: 0;
-}
-.cat-occasion-card-photo .cat-occasion-meta {
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-}
-.cat-occasion-card-photo .cat-occasion-label {
-  display: inline-block;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 17px;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-  background: var(--c, var(--marca));
-  color: var(--card-fg, var(--crema));
-  padding: 5px 12px 6px;
-  border-radius: 10px;
-}
-.cat-occasion-card-photo .cat-occasion-tagline {
-  display: block;
-  font-family: var(--font-body);
-  font-size: 11.5px;
-  color: var(--crema);
-  text-shadow: 0 1px 6px rgba(15, 23, 48, 0.6);
-  opacity: 0.92;
-}
-.cat-occasion-count-tr {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-  margin-top: 0;
-  background: var(--crema);
-  color: var(--tinta);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
-  padding: 4px 9px;
-  border-radius: var(--radius-pill);
-  letter-spacing: 0.04em;
-}
-.cat-occasion-card-photo.card-fg-tinta .cat-occasion-count-tr {
-  /* No invert · crema es OK como pill bg cuando label pill ya lleva fg tinta */
-}
-
-@media (min-width: 600px) and (max-width: 899px) {
-  .cat-occasion-card-photo { aspect-ratio: 4 / 5; }
-}
-@media (max-width: 599px) {
-  .cat-occasion-card-photo { aspect-ratio: 4 / 5; }
-  .cat-occasion-card-photo .cat-occasion-label { font-size: 15px; padding: 4px 10px 5px; }
-  .cat-occasion-card-photo .cat-occasion-tagline { font-size: 10.5px; }
-}
+/* Variante FOTO removida 2026-06-12 (feedback Julián: "muy cargado").
+   Cards de ocasión vuelven a la versión plana con background-color de la
+   ocasión. Los 8 webp duotonados se quedan en assets/occasion-covers/duo/
+   por si quieren revivirse · CDN sirve gratis. */
 .cat-occasion-card:hover  { transform: translate(0, -3px); box-shadow: 0 7px 0 var(--tinta); }
 .cat-occasion-card:active { transform: translate(0, 1px); box-shadow: 0 2px 0 var(--tinta); }
 .cat-occasion-label {
