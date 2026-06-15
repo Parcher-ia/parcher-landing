@@ -14,15 +14,31 @@
        Inline JS en <head> sin defer pa' arrancar el fetch lo antes posible. -->
   <script>
   (function () {
-    var SHORTCODE_RE = /^[2-9A-HJ-NP-Za-km-z]{7}$/; // a-k,m-z: la 'i' es válida (fix 2026-06-15)
+    // 2 formatos coexisten en /p/<code>:
+    //  · Event shortcode (7 chars base32-ish · sin 0/1/I/L/O) → API resolve a /e/<id>.
+    //  · Parche-token (PARCHE + 4 chars del alfabeto sin confundibles · 10 chars · ADR 018)
+    //    → redirige a ig.me/m/soyparcher?ref=<token> pa' login OTP-IG.
+    var SHORTCODE_RE = /^[2-9A-HJ-NP-Za-km-z]{7}$/;            // 7 chars
+    var PARCHE_TOKEN_RE = /^PARCHE[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{4}$/; // 10 chars
+
     var path = window.location.pathname.split('/').filter(Boolean);
     var i = path.indexOf('p');
     var code = (i >= 0 && path[i + 1]) || path[path.length - 1] || '';
 
     function go404() { window.location.replace('/404.html'); }
     function goEvent(id) { window.location.replace('/e/' + encodeURIComponent(id)); }
+    function goIgme(token) {
+      // ref se pasa AUTENTICADO por Meta al webhook del bot · no se confía en
+      // texto del usuario. La app/bot resuelve la sesión al recibir el referral.
+      window.location.replace('https://ig.me/m/soyparcher?ref=' + encodeURIComponent(token));
+    }
 
-    if (!code || !SHORTCODE_RE.test(code)) { go404(); return; }
+    if (!code) { go404(); return; }
+
+    // Parche-token primero (chequeo de prefix evita falso-positivo con shortcode).
+    if (PARCHE_TOKEN_RE.test(code)) { goIgme(code); return; }
+
+    if (!SHORTCODE_RE.test(code)) { go404(); return; }
 
     fetch('https://api.parcher.city/api/public/shortcodes/' + encodeURIComponent(code), {
       headers: { Accept: 'application/json' },
