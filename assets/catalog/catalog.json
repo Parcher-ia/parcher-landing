@@ -1,15 +1,15 @@
 {
   "$metadata": {
-    "version": "2.0.5",
-    "tokens_source_version": "4.4",
+    "version": "2.0.7",
+    "tokens_source_version": "4.6",
     "source": "marca_parcher/tokens.json",
     "generator": "parcher-ia-backend/scripts/build-catalog.ts",
-    "generated_at": "2026-06-12T10:39:51.855Z",
+    "generated_at": "2026-06-15T12:13:04.960Z",
     "gaps": [
       "vibe_to_cluster_hints: aún no canónico en tokens.json — stub vacío hasta que se ratifique en Fase 2 (Editor).",
       "moment_priors: aún no canónico en tokens.json — valores provisionales derivados de brand-book §8.4.1, pendiente ratificación de marca."
     ],
-    "checksum_sha256": "4cdf6d8557c4b3652115097dd615acda914d06aa971e732f0ef6c896c4d889cf"
+    "checksum_sha256": "ac6dad70dd8ea2bac1ebb902c85de827ccbaa679678fda27ea201eea3ce52525"
   },
   "clusters_top_level": [
     "CULTURA",
@@ -402,8 +402,8 @@
     },
     "with_friends": {
       "label": "Con el parche",
-      "color_dominante_hex": "#4B8FBF",
-      "fg_token": "crema",
+      "color_dominante_hex": "#D87A2C",
+      "fg_token": "tinta",
       "order": 2,
       "kind": "occasion",
       "labels": {
@@ -442,8 +442,8 @@
     },
     "learn_create": {
       "label": "Aprender y crear",
-      "color_dominante_hex": "#C13D60",
-      "fg_token": "crema",
+      "color_dominante_hex": "#A088CC",
+      "fg_token": "tinta",
       "order": 6,
       "kind": "occasion",
       "labels": {
@@ -478,7 +478,8 @@
         "now",
         "today",
         "weekend",
-        "this_week"
+        "this_week",
+        "this_month"
       ],
       "labels": {
         "co": "Cuándo"
@@ -488,7 +489,8 @@
           "now": "Ahora/Esta noche",
           "today": "Hoy",
           "weekend": "Este finde",
-          "this_week": "Esta semana"
+          "this_week": "Esta semana",
+          "this_month": "Este mes"
         }
       }
     },

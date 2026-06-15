@@ -1,5 +1,5 @@
-/* parcher · catalog.css · generado desde tokens.json v4.3 · 2026-06-10
-   SSOT: marca_parcher/tokens.json · NO editar a mano — regenerar.
+/* parcher · catalog.css · desde tokens.json v4.6 · 2026-06-15 (ADR 020)
+   SSOT: marca_parcher/tokens.json · no hay generador automático del .css (build-catalog.ts solo emite .json) — mantener a mano en sync con tokens.json.
    20 tokens: 3 foundational + 17 cluster (15 operativos + sol/rosa reasignados a ocasiones · ADR 013/014).
    Regla §5.2.6: el CTA primario SIEMPRE usa --marca. Cluster/family tokens no lo reemplazan. */
 :root {
@@ -31,11 +31,11 @@
 
   /* ocasiones · Set F (ADR 013) · aliases para chips/covers/stickers */
   --ocasion-live-shows: var(--neón);  /* Ver en vivo */
-  --ocasion-with-friends: var(--cielo);  /* Con el parche */
+  --ocasion-with-friends: var(--mango);  /* Con el parche · ADR 020 (era --cielo) */
   --ocasion-with-family: var(--sol);  /* Plan en familia */
   --ocasion-with-partner: var(--rosa);  /* Con la pareja */
   --ocasion-explore-city: var(--horizonte);  /* Descubrir la ciudad */
-  --ocasion-learn-create: var(--fucsia);  /* Aprender y crear */
+  --ocasion-learn-create: var(--lavanda);  /* Aprender y crear · ADR 020 (era --fucsia) */
   --ocasion-recharge: var(--jade);  /* Recargar */
   --ocasion-meet-people: var(--vino);  /* Conocer gente */
 
