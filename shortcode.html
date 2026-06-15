@@ -14,12 +14,15 @@
        Inline JS en <head> sin defer pa' arrancar el fetch lo antes posible. -->
   <script>
   (function () {
-    // 2 formatos coexisten en /p/<code>:
+    // 3 formatos coexisten en /p/<code>:
     //  · Event shortcode (7 chars base32-ish · sin 0/1/I/L/O) → API resolve a /e/<id>.
-    //  · Parche-token (PARCHE + 4 chars del alfabeto sin confundibles · 10 chars · ADR 018)
+    //  · OTP-IG code (PARCHE + 4 chars sin confundibles · 10 chars · ADR 018)
     //    → redirige a ig.me/m/soyparcher?ref=<token> pa' login OTP-IG.
+    //  · Parche de coordinación (10 chars base57 sin confundibles · ADR 021)
+    //    → pantalla de votar de la app (app.parcher.co/p/<token>).
     var SHORTCODE_RE = /^[2-9A-HJ-NP-Za-km-z]{7}$/;            // 7 chars
-    var PARCHE_TOKEN_RE = /^PARCHE[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{4}$/; // 10 chars
+    var PARCHE_TOKEN_RE = /^PARCHE[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{4}$/; // 10 chars (OTP-IG)
+    var PARCHE_COORD_RE = /^[A-HJ-NP-Za-km-z2-9]{10}$/;        // 10 chars (coordinación · ADR 021)
 
     var path = window.location.pathname.split('/').filter(Boolean);
     var i = path.indexOf('p');
@@ -32,11 +35,17 @@
       // texto del usuario. La app/bot resuelve la sesión al recibir el referral.
       window.location.replace('https://ig.me/m/soyparcher?ref=' + encodeURIComponent(token));
     }
+    function goParche(token) {
+      // Token de coordinación (ADR 021) → pantalla de votar de la app.
+      window.location.replace('https://app.parcher.co/p/' + encodeURIComponent(token));
+    }
 
     if (!code) { go404(); return; }
 
-    // Parche-token primero (chequeo de prefix evita falso-positivo con shortcode).
+    // OTP-IG primero (prefix PARCHE evita falso-positivo con coordinación/shortcode).
     if (PARCHE_TOKEN_RE.test(code)) { goIgme(code); return; }
+    // Parche de coordinación (10 chars · ADR 021) → app.
+    if (PARCHE_COORD_RE.test(code)) { goParche(code); return; }
 
     if (!SHORTCODE_RE.test(code)) { go404(); return; }
 
