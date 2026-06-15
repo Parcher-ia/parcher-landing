@@ -1,6 +1,7 @@
 /* parcher-landing-rewrite — CloudFront Function (viewer-request)
  *
- * v8 (sorpréndeme + guardados · 2026-06-14):
+ * v9 (visor /ver · 2026-06-14):
+ *   - /ver                     → /app-index.html (feed scrolleable de listas)
  *   - /sorprendeme · /guardados → /app-index.html (la app · todos)
  *   - /buscar                  → /app-index.html (la app · todos)
  *   - /e/<uuid>  móvil → /app-index.html (rail) · desktop/bots → prerender
@@ -66,7 +67,7 @@ function handler(event) {
     return event.request;
   }
   // /f/<ocasión> y /buscar → la app (deep links del feed · desktop también)
-  if (uri.substring(0, 3) === '/f/' || uri === '/buscar' || uri === '/guardados' || uri === '/sorprendeme') {
+  if (uri.substring(0, 3) === '/f/' || uri === '/buscar' || uri === '/guardados' || uri === '/sorprendeme' || uri === '/ver') {
     event.request.uri = '/app-index.html';
     return event.request;
   }
