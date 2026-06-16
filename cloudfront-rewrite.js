@@ -80,7 +80,10 @@ function handler(event) {
     uri === '/buscar' ||
     uri === '/guardados' ||
     uri === '/sorprendeme' ||
-    uri === '/ver'
+    uri === '/ver' ||
+    uri === '/lo-mio' ||
+    uri === '/me-gusta' ||
+    uri === '/listo'
   ) {
     event.request.uri = '/app-index.html';
     return event.request;
