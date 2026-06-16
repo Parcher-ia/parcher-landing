@@ -51,9 +51,16 @@ function handler(event) {
     event.request.uri = uri + '.html';
     return event.request;
   }
-  // /p/<shortcode> → /shortcode.html (client-side resolve)
+  // /p/<code>: token de parche de coordinación (10ch base57, no 'PARCHE') → la
+  // app EN parcher.co (mismo origin · ADR 021, sin saltar a app.parcher.co).
+  // Resto (event shortcode 7ch · OTP-IG 'PARCHE'+4) → shortcode.html (resolve).
   if (uri.length > 3 && uri.substring(0, 3) === '/p/' && uri.indexOf('.') === -1) {
-    event.request.uri = '/shortcode.html';
+    var pcode = uri.substring(3).replace(/\/$/, '');
+    if (pcode.length === 10 && pcode.substring(0, 6) !== 'PARCHE') {
+      event.request.uri = '/app-index.html';
+    } else {
+      event.request.uri = '/shortcode.html';
+    }
     return event.request;
   }
   // /cali (sin trailing slash) → /cali.html
@@ -66,8 +73,15 @@ function handler(event) {
     event.request.uri = uri + '.html';
     return event.request;
   }
-  // /f/<ocasión> y /buscar → la app (deep links del feed · desktop también)
-  if (uri.substring(0, 3) === '/f/' || uri === '/buscar' || uri === '/guardados' || uri === '/sorprendeme' || uri === '/ver') {
+  // /f/<ocasión> · /buscar · /parche/* → la app (deep links del feed · ADR 021)
+  if (
+    uri.substring(0, 3) === '/f/' ||
+    uri.substring(0, 8) === '/parche/' ||
+    uri === '/buscar' ||
+    uri === '/guardados' ||
+    uri === '/sorprendeme' ||
+    uri === '/ver'
+  ) {
     event.request.uri = '/app-index.html';
     return event.request;
   }
