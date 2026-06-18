@@ -63,9 +63,11 @@ function handler(event) {
     }
     return event.request;
   }
-  // /cali (sin trailing slash) → /cali.html
+  // /cali (sin trailing slash): móvil (no-bot) → app coldstart (puertas) ·
+  // desktop y bots → /cali.html (SEO intacto). Decisión Julián 2026-06-18:
+  // usuarios en celular no deben caer en la lista desktop, van directo al app.
   if (uri === '/cali' || uri === '/cali/') {
-    event.request.uri = '/cali.html';
+    event.request.uri = isMobile && !isBot ? '/app-index.html' : '/cali.html';
     return event.request;
   }
   // /terms → /terms.html (página legal · ToS · anti-scrape Tier 0)
@@ -73,9 +75,9 @@ function handler(event) {
     event.request.uri = '/terms.html';
     return event.request;
   }
-  // /cali/<slug> → /cali/<slug>.html
+  // /cali/<slug>: móvil (no-bot) → app coldstart · desktop/bots → /cali/<slug>.html (SEO)
   if (uri.length > 6 && uri.substring(0, 6) === '/cali/' && uri.indexOf('.') === -1) {
-    event.request.uri = uri + '.html';
+    event.request.uri = isMobile && !isBot ? '/app-index.html' : uri + '.html';
     return event.request;
   }
   // /f/<ocasión> · /buscar · /parche/* → la app (deep links del feed · ADR 021)
