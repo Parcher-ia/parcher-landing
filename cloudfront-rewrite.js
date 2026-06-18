@@ -68,6 +68,11 @@ function handler(event) {
     event.request.uri = '/cali.html';
     return event.request;
   }
+  // /terms → /terms.html (página legal · ToS · anti-scrape Tier 0)
+  if (uri === '/terms' || uri === '/terms/') {
+    event.request.uri = '/terms.html';
+    return event.request;
+  }
   // /cali/<slug> → /cali/<slug>.html
   if (uri.length > 6 && uri.substring(0, 6) === '/cali/' && uri.indexOf('.') === -1) {
     event.request.uri = uri + '.html';

@@ -1,4 +1,173 @@
-User-agent: *
+# parcher.co · robots policy
+# Allowlist: motores de búsqueda + previews sociales reales (Google, Bing,
+# Apple, Yandex, DuckDuckGo, Mojeek; previews de WhatsApp/Telegram/FB/Twitter).
+# Blocklist explícita: AI training crawlers y archivos web. El contenido editorial
+# de parcher (descripciones, categorización, ocasiones) NO está autorizado para
+# entrenar modelos de terceros ni para mirror en archive.org.
+#
+# Ver también: parcher.co/terms
+
+# ── AI training (NO autorizados) ────────────────────────────────────────────
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: DuckAssistBot
+Disallow: /
+
+User-agent: AwarioRssBot
+Disallow: /
+
+User-agent: AwarioSmartBot
+Disallow: /
+
+User-agent: TimpiBot
+Disallow: /
+
+User-agent: Webzio-Extended
+Disallow: /
+
+# ── Archive / mirror bots ───────────────────────────────────────────────────
+User-agent: ia_archiver
+Disallow: /
+
+User-agent: archive.org_bot
+Disallow: /
+
+User-agent: Wayback
+Disallow: /
+
+# ── SEO competitors / scrapers conocidos ────────────────────────────────────
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: SeekportBot
+Disallow: /
+
+User-agent: dataforseo
+Disallow: /
+
+User-agent: serpstatbot
+Disallow: /
+
+# ── Allow explícito · motores y previews legítimos ──────────────────────────
+User-agent: Googlebot
 Allow: /
+Disallow: /api/
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+
+User-agent: Applebot
+Allow: /
+Disallow: /api/
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /api/
+
+User-agent: YandexBot
+Allow: /
+Disallow: /api/
+
+User-agent: Mojeekbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+User-agent: Slackbot-LinkExpanding
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+# ── Default · cualquier otro UA: pasa con delay y sin acceso a /api ─────────
+User-agent: *
+Crawl-delay: 10
+Allow: /
+Disallow: /api/
+Disallow: /404.html
 
 Sitemap: https://parcher.co/sitemap.xml
