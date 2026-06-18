@@ -33,6 +33,25 @@
  *   aws --profile parcher cloudfront create-invalidation \
  *     --distribution-id E24RGSFRFUFZGX --paths "/*"
  */
+
+// Mapa slug de categoría /cali/<slug> → key de ocasión del app (/f/<key>).
+// Espejo de OCASION_SLUGS del backend (categoryRenderer). Si drifta, los links
+// de /cali en móvil caen al coldstart (no rompen). Mantener en sync con Set F.
+var SLUG_TO_KEY = {
+  'ver-en-vivo': 'live_shows',
+  'con-el-parche': 'with_friends',
+  'plan-en-familia': 'with_family',
+  'con-la-pareja': 'with_partner',
+  'descubrir-la-ciudad': 'explore_city',
+  'aprender-y-crear': 'learn_create',
+  'recargar': 'recharge',
+  'conocer-gente': 'meet_people'
+};
+
+function redirect(loc) {
+  return { statusCode: 302, statusDescription: 'Found', headers: { 'location': { value: loc } } };
+}
+
 function handler(event) {
   var uri = event.request.uri;
   var headers = event.request.headers;
@@ -63,11 +82,12 @@ function handler(event) {
     }
     return event.request;
   }
-  // /cali (sin trailing slash): móvil (no-bot) → app coldstart (puertas) ·
-  // desktop y bots → /cali.html (SEO intacto). Decisión Julián 2026-06-18:
-  // usuarios en celular no deben caer en la lista desktop, van directo al app.
+  // /cali (sin trailing slash): móvil (no-bot) → 302 al coldstart (la app NO
+  // tiene ruta /cali, por eso redirect y no rewrite) · desktop/bots → /cali.html
+  // (SEO intacto). Decisión Julián 2026-06-18.
   if (uri === '/cali' || uri === '/cali/') {
-    event.request.uri = isMobile && !isBot ? '/app-index.html' : '/cali.html';
+    if (isMobile && !isBot) return redirect('/');
+    event.request.uri = '/cali.html';
     return event.request;
   }
   // /terms → /terms.html (página legal · ToS · anti-scrape Tier 0)
@@ -75,9 +95,16 @@ function handler(event) {
     event.request.uri = '/terms.html';
     return event.request;
   }
-  // /cali/<slug>: móvil (no-bot) → app coldstart · desktop/bots → /cali/<slug>.html (SEO)
+  // /cali/<slug>: móvil (no-bot) → 302 al feed de esa ocasión (/f/<key>),
+  // preservando la intención del link · slug desconocido → coldstart ·
+  // desktop/bots → /cali/<slug>.html (SEO).
   if (uri.length > 6 && uri.substring(0, 6) === '/cali/' && uri.indexOf('.') === -1) {
-    event.request.uri = isMobile && !isBot ? '/app-index.html' : uri + '.html';
+    if (isMobile && !isBot) {
+      var slug = uri.substring(6).replace(/\/$/, '');
+      var key = SLUG_TO_KEY[slug];
+      return redirect(key ? '/f/' + key : '/');
+    }
+    event.request.uri = uri + '.html';
     return event.request;
   }
   // /f/<ocasión> · /buscar · /parche/* → la app (deep links del feed · ADR 021)
