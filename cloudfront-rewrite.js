@@ -1,5 +1,8 @@
 /* parcher-landing-rewrite — CloudFront Function (viewer-request)
  *
+ * v13 (RSVP boletería lite · 2026-07-07):
+ *   - /o/* /t/* /puerta/* /organizador → /app-index.html (piloto 3-lite · gated RSVP_PILOT)
+ *
  * v9 (visor /ver · 2026-06-14):
  *   - /ver                     → /app-index.html (feed scrolleable de listas)
  *   - /sorprendeme · /guardados → /app-index.html (la app · todos)
@@ -108,9 +111,15 @@ function handler(event) {
     return event.request;
   }
   // /f/<ocasión> · /buscar · /parche/* → la app (deep links del feed · ADR 021)
+  // + RSVP/boletería lite (piloto 3-lite): /o/* hub · /t/* ticket · /puerta/*
+  //   escáner · /organizador panel (HANDOFF-vera-rsvp-a1-app §3 · gated RSVP_PILOT)
   if (
     uri.substring(0, 3) === '/f/' ||
     uri.substring(0, 8) === '/parche/' ||
+    uri.substring(0, 3) === '/o/' ||
+    uri.substring(0, 3) === '/t/' ||
+    uri.substring(0, 8) === '/puerta/' ||
+    uri === '/organizador' ||
     uri === '/buscar' ||
     uri === '/guardados' ||
     uri === '/sorprendeme' ||
